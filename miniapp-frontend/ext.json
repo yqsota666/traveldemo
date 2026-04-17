@@ -1,0 +1,9 @@
+{
+  "extEnable": true,
+  "extAppid": "请替换为客户小程序AppID",
+  "directCommit": false,
+  "ext": {
+    "env": "dev",
+    "apiBase": "https://api.example.com"
+  }
+}
