@@ -13,3 +13,12 @@ spring:
 logging:
   level:
     root: info
+
+travel:
+  auth:
+    token-secret: replace-with-a-long-random-secret
+    access-token-expire-seconds: 7200
+    refresh-token-expire-seconds: 2592000
+    wx-appid: ""
+    wx-secret: ""
+    mock-wx-enabled: true
