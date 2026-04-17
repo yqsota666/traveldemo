@@ -1,0 +1,9 @@
+{
+  "desc": "旅游小程序 demo sitemap",
+  "rules": [
+    {
+      "action": "allow",
+      "page": "*"
+    }
+  ]
+}

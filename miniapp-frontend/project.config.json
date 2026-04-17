@@ -1,0 +1,9 @@
+{
+  "miniprogramRoot": "./",
+  "projectname": "travel-miniapp-demo",
+  "appid": "touristappid",
+  "setting": {
+    "es6": true,
+    "enhance": true
+  }
+}

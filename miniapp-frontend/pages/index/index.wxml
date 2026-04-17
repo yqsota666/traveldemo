@@ -1,0 +1,6 @@
+<view class="container">
+  <view class="title">旅游小程序 Demo</view>
+  <view class="subtitle">当前状态：{{statusText}}</view>
+  <button type="primary" bindtap="handlePing">请求后端 TestController</button>
+  <view class="result">{{resultText}}</view>
+</view>
