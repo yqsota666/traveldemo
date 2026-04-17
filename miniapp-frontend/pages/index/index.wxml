@@ -1,6 +1,23 @@
 <view class="container">
   <view class="title">旅游小程序 Demo</view>
   <view class="subtitle">当前状态：{{statusText}}</view>
-  <button type="primary" bindtap="handlePing">请求后端 TestController</button>
+  <view class="login-flag">登录态：{{loggedIn ? "已登录" : "未登录"}}</view>
+
+  <button type="primary" bindtap="handleWxLogin">微信登录</button>
+  <input
+    class="phone-input"
+    type="number"
+    maxlength="20"
+    placeholder="输入手机号后点击绑定"
+    value="{{phoneNumber}}"
+    bindinput="onPhoneInput"
+  />
+  <button bindtap="handleBindPhone">绑定手机号 /api/travel/auth/wx/bind-phone</button>
+  <button bindtap="handleMe">查询 /api/travel/auth/me</button>
+  <button bindtap="handleLogout">退出登录</button>
+
+  <view class="divider"></view>
+
+  <button type="default" bindtap="handlePing">请求后端 TestController</button>
   <view class="result">{{resultText}}</view>
 </view>
