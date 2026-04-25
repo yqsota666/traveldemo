@@ -1,0 +1,7 @@
+<view class="page">
+  <view class="card">
+    <text class="title">我的积分</text>
+    <text class="value">1280</text>
+    <text class="tip">当前仅展示总积分，积分由后台录入维护。</text>
+  </view>
+</view>

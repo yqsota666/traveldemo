@@ -1,0 +1,10 @@
+<view class="page">
+  <view class="tip">心愿单记录未来想去哪里，与旅行地图（过去足迹）独立。</view>
+  <block wx:for="{{list}}" wx:key="id">
+    <view class="item">
+      <text class="title">{{item.destination}}</text>
+      <text class="desc">理由：{{item.reason}}</text>
+      <text class="desc">同行：{{item.withWhom}}</text>
+    </view>
+  </block>
+</view>

@@ -1,0 +1,42 @@
+<scroll-view scroll-y class="page">
+  <view class="section">
+    <text class="title">公司介绍</text>
+    <text class="text">我们专注亲子定制旅行服务，覆盖北京、西安等核心目的地，强调安心、轻松和深度体验。</text>
+  </view>
+
+  <view class="section">
+    <text class="title">导游介绍</text>
+    <view class="guide-grid">
+      <view class="guide-card">
+        <image class="avatar" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=300&q=80"></image>
+        <text class="name">小鹿导游</text>
+        <text class="meta">擅长城市：北京 | 从业7年</text>
+        <text class="meta">标签：亲子互动、文化讲解</text>
+      </view>
+      <view class="guide-card">
+        <image class="avatar" src="https://images.unsplash.com/photo-1521572267360-ee0c2909d518?auto=format&fit=crop&w=300&q=80"></image>
+        <text class="name">阿远导游</text>
+        <text class="meta">擅长城市：西安 | 从业5年</text>
+        <text class="meta">标签：历史线路、慢节奏游</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="section">
+    <text class="title">用户好评</text>
+    <view class="masonry">
+      <image class="shot tall" src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=800&q=80" mode="aspectFill"></image>
+      <image class="shot" src="https://images.unsplash.com/photo-1552581234-26160f608093?auto=format&fit=crop&w=800&q=80" mode="aspectFill"></image>
+      <image class="shot" src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=800&q=80" mode="aspectFill"></image>
+    </view>
+  </view>
+
+  <view class="section">
+    <text class="title">合作资源</text>
+    <view class="logo-wall">
+      <view class="logo-item">酒店集团A</view>
+      <view class="logo-item">景区联盟B</view>
+      <view class="logo-item">合作交通C</view>
+    </view>
+  </view>
+</scroll-view>

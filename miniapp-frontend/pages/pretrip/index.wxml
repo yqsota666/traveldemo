@@ -1,0 +1,26 @@
+<view class="page">
+  <view class="card weather" bindtap="handleCardTap" data-type="天气穿搭">
+    <text class="title">每日天气 + 穿搭建议</text>
+    <text class="sub">实时拉取天气，规则文案推荐穿搭</text>
+  </view>
+  <view class="card" bindtap="handleCardTap" data-type="Checklist">
+    <text class="title">出行清单 Checklist</text>
+    <text class="sub">证件、衣物、药品、孩子物品（首期仅勾选）</text>
+  </view>
+  <view class="card" bindtap="handleCardTap" data-type="攻略">
+    <text class="title">景点攻略</text>
+    <text class="sub">按目的地推荐行前内容（结构待定）</text>
+  </view>
+  <view class="card" bindtap="handleCardTap" data-type="手册">
+    <text class="title">免费研学手册</text>
+    <text class="sub">PDF优先阅读，后台上传维护</text>
+  </view>
+  <view class="card" bindtap="handleCardTap" data-type="活动日历">
+    <text class="title">目的地亲子活动日历</text>
+    <text class="sub">首期只读展示，后台人工发布</text>
+  </view>
+  <view class="card" bindtap="handleCardTap" data-type="音频">
+    <text class="title">音频小故事</text>
+    <text class="sub">在线流式播放，支持离开页面继续播放</text>
+  </view>
+</view>

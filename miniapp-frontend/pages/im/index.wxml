@@ -1,0 +1,6 @@
+<view class="page">
+  <block wx:for="{{messages}}" wx:key="text">
+    <view class="msg {{item.role === 'user' ? 'user' : 'service'}}">{{item.text}}</view>
+  </block>
+  <view class="form-entry" bindtap="handleFormTap">填写需求表单</view>
+</view>

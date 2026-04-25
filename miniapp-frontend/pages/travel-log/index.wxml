@@ -1,0 +1,10 @@
+<view class="page">
+  <view class="add-btn" bindtap="handleAdd">新增足迹</view>
+  <block wx:for="{{list}}" wx:key="id">
+    <view class="item">
+      <text class="title">{{item.province}} · {{item.city}}</text>
+      <text class="note">{{item.note}}</text>
+      <text class="family">同行：{{item.family}}</text>
+    </view>
+  </block>
+</view>

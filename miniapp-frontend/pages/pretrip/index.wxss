@@ -1,0 +1,6 @@
+.page { min-height: 100vh; background: #f5f7fc; padding: 20rpx; }
+.card { background: #fff; border-radius: 14rpx; padding: 20rpx; margin-bottom: 14rpx; }
+.card.weather { background: linear-gradient(135deg, #4e7be8, #56c5f1); }
+.title { display: block; color: #1f2738; font-size: 30rpx; font-weight: 700; }
+.weather .title, .weather .sub { color: #fff; }
+.sub { display: block; margin-top: 8rpx; color: #667089; font-size: 22rpx; }

@@ -1,0 +1,30 @@
+<view class="page">
+  <swiper class="photo-swiper" indicator-dots autoplay circular>
+    <block wx:for="{{imageList}}" wx:key="*this">
+      <swiper-item><image class="photo" src="{{item}}" mode="aspectFill"></image></swiper-item>
+    </block>
+  </swiper>
+
+  <view class="section">
+    <view class="title">亮点介绍</view>
+    <text class="text">亲子定制、慢节奏游览、专业导游陪伴，线路可按家庭成员兴趣灵活调整。</text>
+  </view>
+
+  <view class="section">
+    <view class="title">行程路线</view>
+    <text class="text">D1 城市欢迎 + 轻松夜游；D2 深度文化体验；D3 亲子互动活动 + 自由探索。</text>
+  </view>
+
+  <view class="section">
+    <view class="title">费用说明</view>
+    <text class="text">价格透明，咨询获取。费用根据人数、日期和酒店偏好动态核算。</text>
+  </view>
+
+  <view class="section">
+    <view class="title">常见问题 FAQ</view>
+    <text class="text">可定制流程、退改政策、儿童服务标准均由顾问在咨询中同步。</text>
+  </view>
+
+  <view class="bottom-gap"></view>
+  <view class="consult-fab" bindtap="handleConsultTap">在线咨询</view>
+</view>

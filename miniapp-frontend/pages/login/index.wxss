@@ -1,0 +1,7 @@
+.page { min-height: 100vh; background: #f5f7fc; padding: 28rpx; }
+.card { background: #fff; border-radius: 16rpx; padding: 28rpx; }
+.title { display: block; font-size: 34rpx; color: #1f273a; font-weight: 700; }
+.sub { display: block; margin-top: 10rpx; color: #667089; font-size: 24rpx; }
+.btn { margin-top: 18rpx; text-align: center; border-radius: 12rpx; padding: 20rpx 0; font-size: 26rpx; }
+.btn.primary { background: #3eb575; color: #fff; }
+.btn.ghost { background: #f2f5fc; color: #3e4966; }

@@ -1,0 +1,9 @@
+<view class="page">
+  <view class="title">旅游产品商城</view>
+  <block wx:for="{{list}}" wx:key="id">
+    <view class="item" bindtap="handleItemTap" data-id="{{item.id}}">
+      <text class="name">{{item.title}}</text>
+      <text class="sub">{{item.subtitle}}</text>
+    </view>
+  </block>
+</view>

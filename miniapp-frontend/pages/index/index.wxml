@@ -1,23 +1,59 @@
-<view class="container">
-  <view class="title">旅游小程序 Demo</view>
-  <view class="subtitle">当前状态：{{statusText}}</view>
-  <view class="login-flag">登录态：{{loggedIn ? "已登录" : "未登录"}}</view>
+<view class="page">
+  <scroll-view scroll-y class="scroll">
+    <swiper class="banner-swiper" indicator-dots autoplay circular interval="4000">
+      <block wx:for="{{bannerList}}" wx:key="*this">
+        <swiper-item>
+          <image class="banner-image" src="{{item}}" mode="aspectFill"></image>
+        </swiper-item>
+      </block>
+    </swiper>
 
-  <button type="primary" bindtap="handleWxLogin">微信登录</button>
-  <input
-    class="phone-input"
-    type="number"
-    maxlength="20"
-    placeholder="输入手机号后点击绑定"
-    value="{{phoneNumber}}"
-    bindinput="onPhoneInput"
-  />
-  <button bindtap="handleBindPhone">绑定手机号 /api/travel/auth/wx/bind-phone</button>
-  <button bindtap="handleMe">查询 /api/travel/auth/me</button>
-  <button bindtap="handleLogout">退出登录</button>
+    <view class="panel">
+      <view class="pretrip-entry" bindtap="handlePretripTap">
+        <text class="pretrip-title">行前中心</text>
+        <text class="pretrip-desc">天气、清单、攻略、手册、活动和音频都在这里</text>
+      </view>
 
-  <view class="divider"></view>
+      <view class="block-title">定制游服务城市</view>
+      <block wx:for="{{cityList}}" wx:key="id">
+        <view
+          class="city-card {{item.status !== '已上线' ? 'city-card-disabled' : ''}}"
+          bindtap="handleCityTap"
+          data-id="{{item.id}}"
+          data-name="{{item.name}}"
+          data-status="{{item.status}}"
+        >
+          <image class="city-bg" src="{{item.image}}" mode="aspectFill"></image>
+          <view class="city-mask"></view>
+          <view class="city-copy">
+            <text class="city-name">{{item.name}}</text>
+            <text class="city-status">{{item.status}}</text>
+          </view>
+        </view>
+      </block>
 
-  <button type="default" bindtap="handlePing">请求后端 TestController</button>
-  <view class="result">{{resultText}}</view>
+      <view class="block-title">五星级酒店代订</view>
+      <block wx:for="{{hotelList}}" wx:key="id">
+        <view class="hotel-card" bindtap="handleHotelTap" data-id="{{item.id}}">
+          <image class="hotel-bg" src="{{item.image}}" mode="aspectFill"></image>
+          <view class="city-mask"></view>
+          <view class="hotel-copy">
+            <text class="hotel-name">{{item.name}}</text>
+            <text class="hotel-tag">{{item.tag}}</text>
+          </view>
+        </view>
+      </block>
+
+    </view>
+    <view class="bottom-space"></view>
+  </scroll-view>
+
+  <view class="consult-fab" bindtap="handleConsultTap">在线咨询</view>
+  <view class="tabbar">
+    <block wx:for="{{navList}}" wx:key="key">
+      <view class="tab-item" bindtap="handleFooterTap" data-key="{{item.key}}">
+        <text class="tab-text {{item.key === 'home' ? 'active' : ''}}">{{item.label}}</text>
+      </view>
+    </block>
+  </view>
 </view>

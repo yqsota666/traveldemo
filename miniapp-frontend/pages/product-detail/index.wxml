@@ -1,0 +1,8 @@
+<view class="page">
+  <image class="cover" src="https://images.unsplash.com/photo-1521292270410-a8c4d716d518?auto=format&fit=crop&w=1200&q=80" mode="aspectFill"></image>
+  <view class="card">
+    <text class="title">西安历史文化深度包</text>
+    <text class="desc">商城详情页仅做展示，购买通过第三方官方平台完成。</text>
+  </view>
+  <view class="cta" bindtap="handleThirdPartyTap">去第三方购买</view>
+</view>

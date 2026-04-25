@@ -1,0 +1,7 @@
+<view class="page">
+  <view class="map-card">
+    <text class="title">中国地图点亮（省级）</text>
+    <image class="map-image" src="https://images.unsplash.com/photo-1524661135-423995f22d0b?auto=format&fit=crop&w=1200&q=80" mode="aspectFill"></image>
+    <text class="tip">已点亮：北京、陕西。足迹由用户手动填写后立即点亮。</text>
+  </view>
+</view>

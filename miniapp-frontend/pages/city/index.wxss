@@ -1,0 +1,15 @@
+.page { min-height: 100vh; background: #f4f6fb; }
+.header { padding: 24rpx; font-size: 34rpx; font-weight: 700; color: #20283a; }
+.container { display: flex; padding: 0 20rpx 20rpx; gap: 16rpx; }
+.left-nav { width: 150rpx; background: #ffffff; border-radius: 14rpx; padding: 10rpx; }
+.nav-item { padding: 18rpx 8rpx; text-align: center; color: #606a84; border-radius: 10rpx; font-size: 24rpx; }
+.nav-item.active { background: #4f70ea; color: #ffffff; font-weight: 700; }
+.content { flex: 1; }
+.card {
+  background: #ffffff;
+  border-radius: 14rpx;
+  padding: 20rpx;
+  margin-bottom: 14rpx;
+}
+.title { display: block; font-size: 28rpx; color: #1c2334; font-weight: 700; }
+.desc { display: block; margin-top: 8rpx; color: #667089; font-size: 22rpx; }

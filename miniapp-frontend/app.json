@@ -1,9 +1,25 @@
 {
   "pages": [
-    "pages/index/index"
+    "pages/index/index",
+    "pages/city/index",
+    "pages/travel-detail/index",
+    "pages/hotel-detail/index",
+    "pages/mall/index",
+    "pages/product-detail/index",
+    "pages/about/index",
+    "pages/profile/index",
+    "pages/login/index",
+    "pages/points/index",
+    "pages/favorites/index",
+    "pages/travel-map/index",
+    "pages/pretrip/index",
+    "pages/travel-log/index",
+    "pages/wishlist/index",
+    "pages/im/index",
+    "pages/consult-form/index"
   ],
   "window": {
-    "navigationBarTitleText": "旅游小程序 Demo",
+    "navigationBarTitleText": "亲子旅行",
     "navigationBarBackgroundColor": "#ffffff",
     "navigationBarTextStyle": "black",
     "backgroundTextStyle": "light",

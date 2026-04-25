@@ -1,0 +1,5 @@
+.page { min-height: 100vh; background: #f5f7fc; padding: 20rpx; }
+.card { background: #fff; border-radius: 14rpx; padding: 24rpx; }
+.title { display: block; font-size: 30rpx; color: #25304a; font-weight: 700; }
+.value { display: block; margin-top: 12rpx; font-size: 48rpx; color: #4d5deb; font-weight: 700; }
+.tip { display: block; margin-top: 10rpx; color: #68728e; font-size: 22rpx; }

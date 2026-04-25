@@ -1,0 +1,12 @@
+<view class="page">
+  <image class="hero" src="https://images.unsplash.com/photo-1445019980597-93fa8acb246c?auto=format&fit=crop&w=1200&q=80" mode="aspectFill"></image>
+  <view class="card">
+    <text class="title">北京亲子五星酒店代订</text>
+    <text class="tag">会员专享价</text>
+    <text class="desc">价格透明，咨询获取。由顾问按家庭需求推荐房型和地段。</text>
+  </view>
+  <view class="actions">
+    <view class="action-btn ghost" bindtap="handleFavoriteTap">收藏</view>
+    <view class="action-btn primary" bindtap="handleConsultTap">咨询客服</view>
+  </view>
+</view>

@@ -1,165 +1,113 @@
-const { request } = require("../../utils/request");
-const { saveSession, clearSession, isLoggedIn } = require("../../utils/auth");
-
 Page({
   data: {
-    statusText: "等待操作",
-    resultText: "点击按钮后显示后端返回结果",
-    loggedIn: false,
-    phoneNumber: ""
-  },
-
-  onShow() {
-    this.setData({
-      loggedIn: isLoggedIn()
-    });
-  },
-
-  async handleWxLogin() {
-    this.setData({ statusText: "微信登录中..." });
-    try {
-      const loginRes = await this.wxLogin();
-      const data = await request({
-        url: "/api/travel/auth/wx/login",
-        method: "POST",
-        skipAuth: true,
-        data: {
-          code: loginRes.code
-        }
-      });
-
-      if (Number(data.status) !== 200 || !data.result) {
-        throw new Error(data.message || "登录失败");
+    bannerList: [
+      "https://images.unsplash.com/photo-1527631746610-bca00a040d60?auto=format&fit=crop&w=1400&q=80",
+      "https://images.unsplash.com/photo-1503220317375-aaad61436b1b?auto=format&fit=crop&w=1400&q=80",
+      "https://images.unsplash.com/photo-1505765050516-f72dcac9c60f?auto=format&fit=crop&w=1400&q=80"
+    ],
+    cityList: [
+      {
+        id: "beijing",
+        name: "北京",
+        status: "已上线",
+        image: "https://images.unsplash.com/photo-1547981609-4b6bf67db8df?auto=format&fit=crop&w=1200&q=80"
+      },
+      {
+        id: "xian",
+        name: "西安",
+        status: "已上线",
+        image: "https://images.unsplash.com/photo-1606236929522-e3f0a6d7f6a5?auto=format&fit=crop&w=1200&q=80"
+      },
+      {
+        id: "xinjiang",
+        name: "新疆",
+        status: "即将上线",
+        image: "https://images.unsplash.com/photo-1511231881203-129dae6ed647?auto=format&fit=crop&w=1200&q=80"
+      },
+      {
+        id: "chengdu",
+        name: "成都",
+        status: "规划中",
+        image: "https://images.unsplash.com/photo-1621417930015-6643cf67ff8e?auto=format&fit=crop&w=1200&q=80"
       }
-
-      saveSession(data.result);
-      this.setData({
-        statusText: "登录成功",
-        loggedIn: true,
-        resultText: JSON.stringify(data, null, 2)
-      });
-    } catch (err) {
-      this.setData({
-        statusText: "登录失败",
-        resultText: JSON.stringify(err)
-      });
-    }
+    ],
+    hotelList: [
+      {
+        id: "h1",
+        name: "北京亲子五星酒店代订",
+        tag: "会员专享价",
+        image: "https://images.unsplash.com/photo-1563911302283-d2bc129e7570?auto=format&fit=crop&w=1200&q=80"
+      },
+      {
+        id: "h2",
+        name: "西安古城酒店代订",
+        tag: "会员专享价",
+        image: "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?auto=format&fit=crop&w=1200&q=80"
+      }
+    ],
+    navList: [
+      { key: "home", label: "首页" },
+      { key: "about", label: "About Us" },
+      { key: "mall", label: "商城" },
+      { key: "profile", label: "个人" }
+    ]
   },
 
-  async handleMe() {
-    this.setData({ statusText: "查询登录状态..." });
-    try {
-      const data = await request({
-        url: "/api/travel/auth/me",
-        method: "GET"
-      });
-      this.setData({
-        statusText: "查询成功",
-        loggedIn: isLoggedIn(),
-        resultText: JSON.stringify(data, null, 2)
-      });
-    } catch (err) {
-      this.setData({
-        statusText: "查询失败",
-        loggedIn: false,
-        resultText: JSON.stringify(err)
-      });
-    }
-  },
-
-  async handleLogout() {
-    this.setData({ statusText: "退出中..." });
-    try {
-      await request({
-        url: "/api/travel/auth/logout",
-        method: "POST"
-      });
-    } finally {
-      clearSession();
-      this.setData({
-        statusText: "已退出",
-        loggedIn: false,
-        resultText: "本地登录态已清理"
-      });
-    }
-  },
-
-  onPhoneInput(e) {
-    this.setData({
-      phoneNumber: (e.detail && e.detail.value) || ""
-    });
-  },
-
-  async handleBindPhone() {
-    const phoneNumber = (this.data.phoneNumber || "").trim();
-    if (!phoneNumber) {
-      this.setData({
-        statusText: "请先输入手机号",
-        resultText: "手机号不能为空"
+  handleCityTap(e) {
+    const { name, id, status } = e.currentTarget.dataset;
+    if (status !== "已上线") {
+      wx.showToast({
+        title: `${name}${status}`,
+        icon: "none"
       });
       return;
     }
-
-    this.setData({ statusText: "绑定手机号中..." });
-    try {
-      const data = await request({
-        url: "/api/travel/auth/wx/bind-phone",
-        method: "POST",
-        data: {
-          phoneNumber
-        }
-      });
-
-      if (Number(data.status) !== 200) {
-        throw new Error(data.message || "绑定失败");
-      }
-
-      this.setData({
-        statusText: "绑定成功",
-        resultText: JSON.stringify(data, null, 2)
-      });
-    } catch (err) {
-      this.setData({
-        statusText: "绑定失败",
-        resultText: JSON.stringify(err)
-      });
-    }
-  },
-
-  async handlePing() {
-    this.setData({
-      statusText: "请求中..."
+    wx.navigateTo({
+      url: `/pages/city/index?cityId=${id}&cityName=${name}`
     });
-
-    try {
-      const data = await request({
-        url: "/api/test/ping"
-      });
-
-      this.setData({
-        statusText: "请求成功",
-        resultText: JSON.stringify(data, null, 2)
-      });
-    } catch (err) {
-      this.setData({
-        statusText: "请求失败",
-        resultText: JSON.stringify(err)
-      });
-    }
   },
 
-  wxLogin() {
-    return new Promise((resolve, reject) => {
-      wx.login({
-        success: (res) => {
-          if (res.code) {
-            resolve(res);
-            return;
-          }
-          reject(new Error("wx.login 未返回 code"));
-        },
-        fail: (err) => reject(err)
-      });
+  handleHotelTap(e) {
+    const { id } = e.currentTarget.dataset;
+    wx.navigateTo({
+      url: `/pages/hotel-detail/index?id=${id}`
+    });
+  },
+
+  handleConsultTap() {
+    wx.navigateTo({
+      url: "/pages/im/index?source=home"
+    });
+  },
+
+  handleFooterTap(e) {
+    const { key } = e.currentTarget.dataset;
+    const map = {
+      home: "/pages/index/index",
+      about: "/pages/about/index",
+      mall: "/pages/mall/index",
+      profile: "/pages/profile/index"
+    };
+    wx.navigateTo({
+      url: map[key]
+    });
+  },
+
+  handlePretripTap() {
+    wx.navigateTo({
+      url: "/pages/pretrip/index"
+    });
+  },
+
+  handleTravelLogTap() {
+    wx.navigateTo({
+      url: "/pages/travel-log/index"
+    });
+  },
+
+  handleWishTap() {
+    wx.navigateTo({
+      url: "/pages/wishlist/index"
     });
   }
 });

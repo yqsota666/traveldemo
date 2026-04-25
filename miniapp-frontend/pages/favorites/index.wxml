@@ -1,0 +1,10 @@
+<view class="page">
+  <view class="item">
+    <text class="name">故宫亲子讲解</text>
+    <text class="sub">已收藏，方便后续咨询</text>
+  </view>
+  <view class="item">
+    <text class="name">北京亲子五星酒店代订</text>
+    <text class="sub">已收藏，方便后续咨询</text>
+  </view>
+</view>

@@ -1,0 +1,8 @@
+<view class="page">
+  <view class="card">
+    <text class="title">欢迎登录亲子旅行</text>
+    <text class="sub">先浏览，关键动作再登录；微信授权优先</text>
+    <view class="btn primary" bindtap="handleWechatLogin">微信授权登录</view>
+    <view class="btn ghost" bindtap="handlePhoneLogin">手机号一键登录</view>
+  </view>
+</view>

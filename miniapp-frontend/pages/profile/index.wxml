@@ -1,0 +1,15 @@
+<view class="page">
+  <view class="top">
+    <text class="name">{{loggedIn ? '亲子旅行会员' : '未登录用户'}}</text>
+    <text class="score">我的积分：{{loggedIn ? score : '--'}}</text>
+  </view>
+  <view wx:if="{{!loggedIn}}" class="login-tip" bindtap="handleLoginTap">点击登录后查看积分、收藏和旅行地图</view>
+
+  <view class="menu">
+    <view class="item" bindtap="goPage" data-url="/pages/points/index">积分</view>
+    <view class="item" bindtap="goPage" data-url="/pages/favorites/index">收藏</view>
+    <view class="item" bindtap="goPage" data-url="/pages/travel-map/index">旅行地图</view>
+    <view class="item" bindtap="goPage" data-url="/pages/travel-log/index">旅行Log</view>
+    <view class="item" bindtap="goPage" data-url="/pages/wishlist/index">出游心愿单</view>
+  </view>
+</view>

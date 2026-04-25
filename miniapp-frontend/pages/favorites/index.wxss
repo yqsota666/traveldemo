@@ -1,0 +1,4 @@
+.page { min-height: 100vh; background: #f5f7fc; padding: 20rpx; }
+.item { background: #fff; border-radius: 14rpx; padding: 20rpx; margin-bottom: 14rpx; }
+.name { display: block; color: #20283b; font-size: 28rpx; font-weight: 700; }
+.sub { display: block; margin-top: 8rpx; color: #69738f; font-size: 22rpx; }

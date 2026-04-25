@@ -1,0 +1,9 @@
+<view class="page">
+  <view class="field"><text>出行日期</text></view>
+  <view class="field"><text>人数（成人/儿童）</text></view>
+  <view class="field"><text>预算区间</text></view>
+  <view class="field"><text>目的地城市</text></view>
+  <view class="field"><text>联系方式（手机号优先）</text></view>
+  <view class="submit" bindtap="handleSubmit">提交需求</view>
+  <view class="note">提示：你已提交，请勿重复。仍可继续提交。</view>
+</view>
