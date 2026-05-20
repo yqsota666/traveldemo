@@ -4,7 +4,7 @@ set -euo pipefail
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 BACKEND_DIR="$ROOT_DIR/travel-backend"
-FRONTEND_DIR="$ROOT_DIR/miniapp-frontend"
+MINIAPP_DIR="$ROOT_DIR/travel-miniapp"
 BACKEND_PORT="8080"
 DB_HOST="127.0.0.1"
 DB_PORT="3306"
@@ -72,17 +72,14 @@ check_database_exists() {
 
 check_frontend_status() {
   info "检查前端项目状态..."
-  if [[ ! -d "$FRONTEND_DIR" ]]; then
-    warn "未发现前端目录: $FRONTEND_DIR"
+  if [[ ! -d "$MINIAPP_DIR" ]]; then
+    warn "未发现小程序目录: $MINIAPP_DIR"
     return
   fi
 
-  if [[ -f "$FRONTEND_DIR/project.config.json" && -f "$FRONTEND_DIR/app.json" ]]; then
-    info "检测到微信小程序项目。"
-    info "请使用微信开发者工具打开目录: $FRONTEND_DIR"
-  else
-    warn "前端目录存在，但未识别为标准微信小程序结构。"
-  fi
+  info "前端: travel-miniapp（Taro 微信小程序）"
+  info "开发: cd $MINIAPP_DIR && npm i && npm run dev:weapp"
+  info "微信开发者工具打开: $MINIAPP_DIR 或仓库根目录（需先编译出 dist/weapp）"
 }
 
 start_backend() {

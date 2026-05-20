@@ -14,5 +14,17 @@
 - 检查并尝试启动 `mysqld`
 - 校验数据库连接
 - 自动创建 `travel_demo` 数据库（不存在时）
-- 检查前端目录（微信小程序）并提示使用微信开发者工具打开
+- 检查 `travel-miniapp` 并提示使用微信开发者工具打开
 - 启动后端服务（`mvn spring-boot:run`）
+
+## 前端（微信小程序）
+
+唯一前端目录为 **`travel-miniapp`**（Taro）。
+
+```bash
+cd travel-miniapp
+npm i
+npm run dev:weapp
+```
+
+用微信开发者工具打开 **`travel-miniapp`** 根目录，或打开仓库根目录（`project.config.json` 已指向 `travel-miniapp/dist/weapp/`）。

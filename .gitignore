@@ -9,6 +9,15 @@ target/
 hs_err_pid*
 replay_pid*
 
+# Node / frontend (travel-miniapp)
+node_modules/
+dist/
+.pnpm-store/
+travel-miniapp/dist/
+travel-miniapp/node_modules/
+figma-source/
+figma-taro-source/
+
 # IDE / OS
 .idea/
 .vscode/
