@@ -1,0 +1,18 @@
+server:
+  port: 8091
+
+spring:
+  application:
+    name: travel-admin-backend
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3306/travel_demo?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai
+    username: root
+    password: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jackson:
+    time-zone: Asia/Shanghai
+
+admin:
+  jwt:
+    secret: zB3Bkdl6XJxPwpq-2DvyBRErgFtYEsOlRNiUdqZoe7EI6xQFmycQw0sTJ5Z7fthf
+    expire-seconds: 28800

@@ -15,6 +15,9 @@ dist/
 .pnpm-store/
 travel-miniapp/dist/
 travel-miniapp/node_modules/
+travel-admin-web/node_modules/
+travel-admin-web/dist/
+travel-admin-backend/target/
 figma-source/
 figma-taro-source/
 
