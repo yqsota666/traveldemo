@@ -11,8 +11,9 @@ import {
   IconUserGroup,
   IconImage,
   IconStorage,
+  IconPoweroff,
 } from '@arco-design/web-react/icon';
-import { Dropdown, Layout, Menu, Typography } from '@arco-design/web-react';
+import { Avatar, Dropdown, Layout, Menu, Typography } from '@arco-design/web-react';
 import { useEffect, useMemo, useState } from 'react';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
@@ -169,6 +170,7 @@ export default function AdminLayout() {
           navigate('/login');
         }}
       >
+        <IconPoweroff />
         退出登录
       </MenuItem>
     </Menu>
@@ -177,7 +179,13 @@ export default function AdminLayout() {
   return (
     <Layout style={{ height: '100%' }}>
       <Sider className="admin-sider" collapsible breakpoint="lg" width={220}>
-        <div className="admin-sider-logo">旅游管理</div>
+        <div className="admin-sider-logo">
+          <span className="admin-brand-mark">旅</span>
+          <span>
+            <strong>旅游管理</strong>
+            <small>管理后台</small>
+          </span>
+        </div>
         <Menu
           className="admin-side-menu"
           selectedKeys={[selectedKey]}
@@ -218,13 +226,16 @@ export default function AdminLayout() {
       </Sider>
       <Layout>
         <Header className="admin-header">
-          <Typography.Text style={{ marginRight: 'auto', fontWeight: 500 }}>
+          <Typography.Text className="admin-header-title">
             {pageTitle}
           </Typography.Text>
           <Dropdown droplist={dropList} position="br">
-            <Typography.Text style={{ cursor: 'pointer', color: 'var(--color-text)' }}>
-              {user?.realName || user?.username}
-            </Typography.Text>
+            <div className="admin-user-trigger">
+              <Avatar size={28} className="admin-user-avatar">
+                {(user?.realName || user?.username || 'U').slice(0, 1).toUpperCase()}
+              </Avatar>
+              <span>{user?.realName || user?.username}</span>
+            </div>
           </Dropdown>
         </Header>
         <Content className="admin-content">

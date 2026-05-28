@@ -12,9 +12,10 @@ import {
   Table,
   Tag,
 } from '@arco-design/web-react';
-import { IconPlus, IconSearch } from '@arco-design/web-react/icon';
+import { IconPlus, IconRefresh, IconSearch } from '@arco-design/web-react/icon';
 import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
+import PageHeader from '../../components/PageHeader';
 import { api, TravelOrder } from '../../services/api';
 import { useAuth } from '../../hooks/useAuth';
 import { PageResult } from '../../utils/request';
@@ -24,6 +25,12 @@ const STATUS_MAP: Record<string, { color: string; label: string }> = {
   CONFIRMED: { color: 'green', label: '已确认' },
   CANCELLED: { color: 'gray', label: '已取消' },
 };
+
+interface SalesOption {
+  id: number;
+  realName: string;
+  username: string;
+}
 
 export default function OrdersPage() {
   const { hasPermission } = useAuth();
@@ -36,16 +43,22 @@ export default function OrdersPage() {
   const [loading, setLoading] = useState(false);
   const [keyword, setKeyword] = useState('');
   const [status, setStatus] = useState<string | undefined>();
+  const [salesOptions, setSalesOptions] = useState<SalesOption[]>([]);
   const [formVisible, setFormVisible] = useState(false);
   const [editing, setEditing] = useState<TravelOrder | null>(null);
   const [detail, setDetail] = useState<TravelOrder | null>(null);
   const [logs, setLogs] = useState<Record<string, unknown>[]>([]);
   const [form] = Form.useForm();
 
-  const load = async (page = 1) => {
+  const load = async (page = 1, nextKeyword = keyword, nextStatus = status) => {
     setLoading(true);
     try {
-      const res = await api.listOrders({ page, pageSize: 10, keyword, status });
+      const res = await api.listOrders({
+        page,
+        pageSize: 10,
+        keyword: nextKeyword || undefined,
+        status: nextStatus,
+      });
       setData(res.data.result);
     } finally {
       setLoading(false);
@@ -54,6 +67,12 @@ export default function OrdersPage() {
 
   useEffect(() => {
     load();
+    if (hasPermission('order:view_all')) {
+      api
+        .listAdmins({ page: 1, pageSize: 100, roleCode: 'SALES' })
+        .then((res) => setSalesOptions(res.data.result.records as unknown as SalesOption[]))
+        .catch(() => setSalesOptions([]));
+    }
   }, []);
 
   const openCreate = () => {
@@ -152,8 +171,9 @@ export default function OrdersPage() {
 
   return (
     <div>
+      <PageHeader title="旅游订单" />
       <Card className="page-content-card">
-        <Space style={{ marginBottom: 16 }} wrap>
+        <Space className="admin-filter-bar" wrap>
           <Input
             prefix={<IconSearch />}
             placeholder="订单号/客户/目的地"
@@ -172,6 +192,16 @@ export default function OrdersPage() {
           <Button type="primary" onClick={() => load(1)}>
             查询
           </Button>
+          <Button
+            icon={<IconRefresh />}
+            onClick={() => {
+              setKeyword('');
+              setStatus(undefined);
+              load(1, '', undefined);
+            }}
+          >
+            重置
+          </Button>
           {hasPermission('order:create') && (
             <Button type="primary" icon={<IconPlus />} onClick={openCreate}>
               新建订单
@@ -187,7 +217,7 @@ export default function OrdersPage() {
             current: data.page,
             pageSize: data.pageSize,
             total: data.total,
-            onChange: load,
+            onChange: (nextPage) => load(nextPage),
           }}
         />
       </Card>
@@ -223,6 +253,16 @@ export default function OrdersPage() {
               options={Object.entries(STATUS_MAP).map(([v, o]) => ({ value: v, label: o.label }))}
             />
           </Form.Item>
+          {!editing && hasPermission('order:view_all') && (
+            <Form.Item label="负责销售" field="salesAdminUserId" extra="不选择时默认归属当前登录账号">
+              <Select
+                allowClear
+                showSearch
+                placeholder="选择销售"
+                options={salesOptions.map((s) => ({ value: s.id, label: `${s.realName}（${s.username}）` }))}
+              />
+            </Form.Item>
+          )}
         </Form>
       </Modal>
 

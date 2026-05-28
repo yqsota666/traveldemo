@@ -1,5 +1,5 @@
 import { Button, Card, Divider, Input, Message, Typography } from '@arco-design/web-react';
-import { IconLock, IconUser } from '@arco-design/web-react/icon';
+import { IconArrowRight, IconCompass, IconLock, IconUser } from '@arco-design/web-react/icon';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
@@ -49,74 +49,72 @@ export default function LoginPage() {
 
   return (
     <div className="login-page">
-      <Card className="login-card" bordered={false}>
-        <div
-          style={{
-            marginBottom: 12,
-            padding: '8px 12px',
-            background: '#e8f3ff',
-            border: '1px solid #165dff',
-            borderRadius: 6,
-            fontSize: 12,
-            color: '#165dff',
-          }}
-        >
-          【远程服务器 · 新版登录页】应看到下方「一键登录」按钮；若只有「请输入账号」则是旧页面，请关掉本机
-          5174 进程后仅用 Cursor 转发远程 5174
-        </div>
-        <h1 className="login-title">旅游管理</h1>
-
-        <Typography.Paragraph style={{ margin: '0 0 16px', fontSize: 13, color: 'var(--color-text-secondary)' }}>
-          测试环境默认密码：<Typography.Text bold>123456</Typography.Text>（账号已预填 director01）
-        </Typography.Paragraph>
-
-        <form onSubmit={onSubmit}>
-          <div style={{ marginBottom: 16 }}>
-            <Typography.Text style={{ display: 'block', marginBottom: 8 }}>
-              <Typography.Text type="error">*</Typography.Text> 账号
-            </Typography.Text>
-            <Input
-              prefix={<IconUser />}
-              placeholder="director01"
-              value={username}
-              onChange={setUsername}
-              allowClear
-              autoComplete="username"
-            />
+      <div className="login-shell">
+        <section className="login-brand-panel">
+          <div className="login-brand-mark">
+            <IconCompass />
           </div>
-          <div style={{ marginBottom: 16 }}>
-            <Typography.Text style={{ display: 'block', marginBottom: 8 }}>
-              <Typography.Text type="error">*</Typography.Text> 密码
-            </Typography.Text>
-            <Input.Password
-              prefix={<IconLock />}
-              placeholder="123456"
-              value={password}
-              onChange={setPassword}
-              allowClear
-              autoComplete="current-password"
-            />
+          <p className="login-kicker">旅游管理后台</p>
+          <h1>旅游管理</h1>
+          <div className="login-route-card">
+            <span>目的地运营</span>
+            <strong>城市 · 景点 · 商品 · 订单</strong>
           </div>
-          <Button type="primary" long htmlType="submit" loading={loading}>
-            登录
-          </Button>
-        </form>
+        </section>
 
-        <Divider style={{ margin: '20px 0' }}>或一键登录</Divider>
+        <Card className="login-card" bordered={false}>
+          <div className="login-card-header">
+            <h2 className="login-title">欢迎回来</h2>
+            <Typography.Paragraph className="login-subtitle">
+              测试环境默认密码：<Typography.Text bold>123456</Typography.Text>
+            </Typography.Paragraph>
+          </div>
 
-        {TEST_ACCOUNTS.map((acc) => (
-          <Button
-            key={acc.username}
-            long
-            type="outline"
-            loading={loading}
-            style={{ marginBottom: 8 }}
-            onClick={() => void doLogin(acc.username, acc.password)}
-          >
-            {acc.label}（{acc.username}）
-          </Button>
-        ))}
-      </Card>
+          <form className="login-form" onSubmit={onSubmit}>
+            <label className="login-field">
+              <span>账号</span>
+              <Input
+                prefix={<IconUser />}
+                placeholder="director01"
+                value={username}
+                onChange={setUsername}
+                allowClear
+                autoComplete="username"
+              />
+            </label>
+            <label className="login-field">
+              <span>密码</span>
+              <Input.Password
+                prefix={<IconLock />}
+                placeholder="123456"
+                value={password}
+                onChange={setPassword}
+                allowClear
+                autoComplete="current-password"
+              />
+            </label>
+            <Button type="primary" long htmlType="submit" loading={loading} icon={<IconArrowRight />}>
+              登录
+            </Button>
+          </form>
+
+          <Divider className="login-divider">一键登录</Divider>
+
+          <div className="login-account-grid">
+            {TEST_ACCOUNTS.map((acc) => (
+              <Button
+                key={acc.username}
+                type="outline"
+                loading={loading}
+                onClick={() => void doLogin(acc.username, acc.password)}
+              >
+                {acc.label}
+                <span>{acc.username}</span>
+              </Button>
+            ))}
+          </div>
+        </Card>
+      </div>
     </div>
   );
 }

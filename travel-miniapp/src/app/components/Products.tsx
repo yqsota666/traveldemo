@@ -5,11 +5,33 @@ import { contentApi, resolveMediaUrl } from '../../api/content/travelContentClie
 
 type ProductItem = { id: number; name: string; desc: string; price: string; img: string };
 
+const DEFAULT_CITIES = [
+  { id: 1, name: '北京' },
+  { id: 2, name: '西安' },
+];
+
+const DEFAULT_PRODUCTS: ProductItem[] = [
+  {
+    id: 1001,
+    name: '宫苑纹样书签',
+    desc: '取自古建窗棂与花草纹样，适合作为旅行纪念礼。',
+    price: '¥39',
+    img: 'https://images.unsplash.com/photo-1519682337058-a94d519337bc?w=500',
+  },
+  {
+    id: 1002,
+    name: '城市印象明信片',
+    desc: '把亲子旅途中值得记住的片段，留在纸面和邮戳里。',
+    price: '¥29',
+    img: 'https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?w=500',
+  },
+];
+
 export default function Products() {
-  const [cities, setCities] = useState<{ id: number; name: string }[]>([]);
-  const [activeCityId, setActiveCityId] = useState<number | null>(null);
-  const [activeCityName, setActiveCityName] = useState('');
-  const [products, setProducts] = useState<ProductItem[]>([]);
+  const [cities, setCities] = useState<{ id: number; name: string }[]>(DEFAULT_CITIES);
+  const [activeCityId, setActiveCityId] = useState<number | null>(DEFAULT_CITIES[0].id);
+  const [activeCityName, setActiveCityName] = useState(DEFAULT_CITIES[0].name);
+  const [products, setProducts] = useState<ProductItem[]>(DEFAULT_PRODUCTS);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedProduct, setSelectedProduct] = useState<ProductItem | null>(null);
 
@@ -34,7 +56,7 @@ export default function Products() {
         price: p.price != null ? `¥${p.price}` : '¥0',
         img: resolveMediaUrl(String(p.coverImage || '')),
       })));
-    }).catch(() => setProducts([]));
+    }).catch(() => setProducts(DEFAULT_PRODUCTS));
   }, [activeCityId, searchQuery]);
 
   const filtered = useMemo(() => products, [products]);
@@ -91,7 +113,7 @@ export default function Products() {
           </div>
           
           <div className="flex flex-col gap-5">
-            {filtered.map((product) => (
+            {filtered.length > 0 ? filtered.map((product) => (
               <div
                 key={product.id}
                 onClick={() => setSelectedProduct(product)}
@@ -106,7 +128,12 @@ export default function Products() {
                   <span className="text-[#C8963E] font-extrabold text-sm">{product.price}</span>
                 </div>
               </div>
-            ))}
+            )) : (
+              <div className="rounded-2xl bg-white/80 border border-white p-6 text-center shadow-[0_4px_16px_rgba(74,140,111,0.08)]">
+                <div className="text-[#1A1A1A] font-extrabold mb-2">暂无匹配商品</div>
+                <div className="text-xs text-[#1A1A1A]/50">换个关键词试试，或切换城市看看。</div>
+              </div>
+            )}
           </div>
         </div>
       </div>

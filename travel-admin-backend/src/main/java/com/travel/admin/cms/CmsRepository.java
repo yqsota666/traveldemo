@@ -25,7 +25,7 @@ public class CmsRepository {
 
     public long count(CmsTable table, Long cityId, String keyword, String publishStatus, Long operatorId) {
         StringBuilder sql = new StringBuilder("SELECT COUNT(*) FROM ").append(table.getTableName())
-                .append(" WHERE deleted_flag = 0");
+                .append(" t WHERE t.deleted_flag = 0");
         List<Object> params = buildFilters(sql, table, cityId, keyword, publishStatus, operatorId);
         Long c = jdbcTemplate.queryForObject(sql.toString(), Long.class, params.toArray());
         return c == null ? 0 : c;

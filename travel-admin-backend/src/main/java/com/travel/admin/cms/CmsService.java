@@ -187,6 +187,9 @@ public class CmsService {
         assertPermission("cms:submit");
         Map<String, Object> existing = getSingleton(table);
         String status = str(existing.get("publish_status"));
+        if (!CmsConstants.STATUS_DRAFT.equals(status) && !CmsConstants.STATUS_OFFLINE.equals(status)) {
+            throw new BusinessException(400, "当前状态不可提交审核");
+        }
         cmsRepository.update(table, 1L, Map.of(
                 "publishStatus", CmsConstants.STATUS_PENDING,
                 "submittedAt", Timestamp.valueOf(LocalDateTime.now())
@@ -197,8 +200,13 @@ public class CmsService {
     @Transactional
     public void approveSingleton(CmsTable table, String comment) {
         assertPermission("cms:approve");
+        Map<String, Object> existing = getSingleton(table);
+        String status = str(existing.get("publish_status"));
+        if (!CmsConstants.STATUS_PENDING.equals(status)) {
+            throw new BusinessException(400, "仅待审核内容可通过");
+        }
         cmsRepository.updatePublishStatus(table, 1L, CmsConstants.STATUS_PUBLISHED, SecurityUtils.currentUser().getUserId());
-        logApproval(table, 1L, "APPROVE", CmsConstants.STATUS_PENDING, CmsConstants.STATUS_PUBLISHED, comment);
+        logApproval(table, 1L, "APPROVE", status, CmsConstants.STATUS_PUBLISHED, comment);
     }
 
     private void validateForSubmit(CmsTable table, Map<String, Object> row) {

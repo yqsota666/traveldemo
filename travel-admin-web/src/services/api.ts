@@ -39,9 +39,12 @@ export interface DeleteRequest {
   customerName: string;
   requestedByAdminUserId: number;
   requestedByName?: string;
+  approverAdminUserId?: number;
+  approverName?: string;
   reason: string;
   requestStatus: string;
   createdAt?: string;
+  processedAt?: string;
 }
 
 export const api = {
@@ -82,7 +85,7 @@ export const api = {
     request.post(`/api/admin/v1/orders/delete-requests/${id}/reject`),
 
   listAdmins: (params: Record<string, unknown>) =>
-    request.get('/api/admin/v1/admins', { params }),
+    request.get<ApiResponse<PageResult<Record<string, unknown>>>>('/api/admin/v1/admins', { params }),
 
   createAdmin: (data: Record<string, unknown>) => request.post('/api/admin/v1/admins', data),
 

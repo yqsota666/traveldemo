@@ -1,4 +1,5 @@
-import { ArrowLeft, Share, MapPin, ChevronRight, Star, HeadphonesIcon, MessageCircle } from 'lucide-react';
+import { ArrowLeft, Share, MapPin, ChevronRight, Star, MessageCircle } from 'lucide-react';
+import Taro from '@tarojs/taro';
 
 interface ItemDetailProps {
   onBack: () => void;
@@ -6,6 +7,10 @@ interface ItemDetailProps {
 }
 
 export default function ItemDetail({ onBack, itemName }: ItemDetailProps) {
+  const showSoon = (title: string) => {
+    Taro.showToast({ title: `${title}已记录，稍后由旅行管家联系`, icon: 'none' });
+  };
+
   return (
     <div className="h-screen flex flex-col bg-[#FDFCF8] text-[#1A1A1A]">
       {/* Header */}
@@ -14,7 +19,10 @@ export default function ItemDetail({ onBack, itemName }: ItemDetailProps) {
           <ArrowLeft className="w-5 h-5" />
         </button>
         <h1 className="text-xl font-bold text-[#4A8C6F]">胜地详览</h1>
-        <button className="p-2 hover:bg-[#F5E6C8]/40 rounded-full text-[#4A8C6F] transition-colors">
+        <button
+          onClick={() => Taro.showShareMenu({ withShareTicket: true }).catch(() => Taro.showToast({ title: '请使用微信右上角分享', icon: 'none' }))}
+          className="p-2 hover:bg-[#F5E6C8]/40 rounded-full text-[#4A8C6F] transition-colors"
+        >
           <Share className="w-5 h-5" />
         </button>
       </div>
@@ -112,17 +120,17 @@ export default function ItemDetail({ onBack, itemName }: ItemDetailProps) {
       <div className="fixed bottom-0 left-0 right-0 bg-[#FDFCF8] border-t border-[#7BBF9E]/30 max-w-[560px] mx-auto z-30 shadow-[0_-4px_16px_rgba(74,140,111,0.08)]">
         <div className="flex h-16">
           <div className="flex flex-1 items-center justify-around border-r border-[#7BBF9E]/30">
-            <button className="flex flex-col items-center justify-center flex-1 h-full hover:bg-[#F5E6C8]/30 text-[#4A8C6F] transition-colors group">
+            <button onClick={() => showSoon('收藏')} className="flex flex-col items-center justify-center flex-1 h-full hover:bg-[#F5E6C8]/30 text-[#4A8C6F] transition-colors group">
               <Star className="w-5 h-5 mb-1 group-hover:scale-110 transition-transform" />
               <span className="text-xs font-bold">收藏</span>
             </button>
             <div className="w-px h-8 bg-[#7BBF9E]/30"></div>
-            <button className="flex flex-col items-center justify-center flex-1 h-full hover:bg-[#F5E6C8]/30 text-[#4A8C6F] transition-colors group">
+            <button onClick={() => Taro.makePhoneCall({ phoneNumber: '4000000000' })} className="flex flex-col items-center justify-center flex-1 h-full hover:bg-[#F5E6C8]/30 text-[#4A8C6F] transition-colors group">
               <MessageCircle className="w-5 h-5 mb-1 group-hover:scale-110 transition-transform" />
               <span className="text-xs font-bold">传书</span>
             </button>
           </div>
-          <button className="flex-[1.5] bg-[#4A8C6F] text-white font-bold text-lg hover:bg-[#3b7359] transition-colors flex items-center justify-center gap-2">
+          <button onClick={() => showSoon('预约意向')} className="flex-[1.5] bg-[#4A8C6F] text-white font-bold text-lg hover:bg-[#3b7359] transition-colors flex items-center justify-center gap-2">
             <span>立即缔约</span>
             <ChevronRight className="w-5 h-5 opacity-80" />
           </button>

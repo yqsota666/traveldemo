@@ -8,11 +8,30 @@ interface HotelListProps {
 
 type HotelItem = { id: number; name: string; price: string; rating: number; tags: string[]; img: string };
 
+const FALLBACK_HOTELS: HotelItem[] = [
+  {
+    id: 9001,
+    name: '城墙边庭院客栈',
+    price: '¥680 起',
+    rating: 4.8,
+    tags: ['亲子房', '接送服务'],
+    img: 'https://images.unsplash.com/photo-1614765437824-f5433016b7b6?w=500',
+  },
+  {
+    id: 9002,
+    name: '胡同慢居',
+    price: '¥520 起',
+    rating: 4.7,
+    tags: ['近景区', '早餐'],
+    img: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=500',
+  },
+];
+
 export default function HotelList({ onBack }: HotelListProps) {
   const [cities, setCities] = useState<{ id: number; name: string }[]>([]);
   const [activeCityId, setActiveCityId] = useState<number | null>(null);
   const [activeTab, setActiveTab] = useState('');
-  const [hotels, setHotels] = useState<HotelItem[]>([]);
+  const [hotels, setHotels] = useState<HotelItem[]>(FALLBACK_HOTELS);
 
   useEffect(() => {
     contentApi.cities().then((res) => {
@@ -36,7 +55,7 @@ export default function HotelList({ onBack }: HotelListProps) {
         tags: String(h.tags || '').split(',').filter(Boolean),
         img: resolveMediaUrl(String(h.coverImage || '')),
       })));
-    }).catch(() => setHotels([]));
+    }).catch(() => setHotels(FALLBACK_HOTELS));
   }, [activeCityId]);
 
   return (
@@ -66,7 +85,7 @@ export default function HotelList({ onBack }: HotelListProps) {
       </div>
 
       <div className="flex-1 overflow-y-auto p-4 space-y-4 scrollbar-hide">
-        {hotels.map((hotel) => (
+        {(hotels.length ? hotels : FALLBACK_HOTELS).map((hotel) => (
           <div key={hotel.id} className="bg-white/80 rounded-2xl overflow-hidden border border-white shadow-sm flex gap-4 p-3">
             <img src={hotel.img || 'https://images.unsplash.com/photo-1614765437824-f5433016b7b6?w=500'} alt={hotel.name} className="w-28 h-28 rounded-xl object-cover shrink-0" />
             <div className="flex flex-col justify-center flex-1">

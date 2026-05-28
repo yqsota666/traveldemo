@@ -7,13 +7,15 @@ import {
   Message,
   Modal,
   Select,
+  Space,
   Switch,
   Table,
   Tag,
 } from '@arco-design/web-react';
 import PageHeader from '../../components/PageHeader';
-import { IconPlus } from '@arco-design/web-react/icon';
+import { IconDelete, IconEdit, IconPlus, IconRefresh, IconSearch } from '@arco-design/web-react/icon';
 import { useEffect, useState } from 'react';
+import ImageUrlInput from '../../components/ImageUrlInput';
 import { api, CmsResourceConfig } from '../../services/api';
 import { useAuth } from '../../hooks/useAuth';
 
@@ -26,6 +28,17 @@ const STATUS_MAP: Record<string, { color: string; label: string }> = {
 
 interface Props {
   config: CmsResourceConfig;
+}
+
+function parseGalleryForForm(value: unknown) {
+  if (!value) return '';
+  if (Array.isArray(value)) return JSON.stringify(value, null, 2);
+  if (typeof value !== 'string') return '';
+  try {
+    return JSON.stringify(JSON.parse(value), null, 2);
+  } catch {
+    return value;
+  }
 }
 
 export default function CmsResourcePage({ config }: Props) {
@@ -41,13 +54,13 @@ export default function CmsResourcePage({ config }: Props) {
   const [selected, setSelected] = useState<number[]>([]);
   const [form] = Form.useForm();
 
-  const load = async (p = 1) => {
+  const load = async (p = 1, nextFilters = filters) => {
     const res = await api.cmsList(config.resource, {
       page: p,
       pageSize: 10,
-      keyword: filters.keyword || undefined,
-      publishStatus: filters.publishStatus || undefined,
-      cityId: filters.cityId,
+      keyword: nextFilters.keyword || undefined,
+      publishStatus: nextFilters.publishStatus || undefined,
+      cityId: nextFilters.cityId,
     });
     setList(res.data.result.records as Record<string, unknown>[]);
     setTotal(res.data.result.total);
@@ -83,7 +96,7 @@ export default function CmsResourcePage({ config }: Props) {
 
   const openEdit = (row: Record<string, unknown>) => {
     setEditingId(row.id as number);
-    const gallery = row.gallery_images;
+    const gallery = row.gallery_images ?? row.galleryImages;
     form.setFieldsValue({
       cityId: row.city_id,
       title: row.title,
@@ -91,7 +104,7 @@ export default function CmsResourcePage({ config }: Props) {
       summary: row.summary,
       coverImage: row.cover_image,
       imageUrl: row.image_url,
-      galleryImages: typeof gallery === 'string' && gallery ? JSON.parse(gallery as string) : [],
+      galleryImages: parseGalleryForForm(gallery),
       tags: row.tags,
       address: row.address,
       priceLabel: row.price_label,
@@ -119,9 +132,12 @@ export default function CmsResourcePage({ config }: Props) {
       try {
         payload.galleryImages = JSON.parse(payload.galleryImages as string);
       } catch {
-        Message.error('图集须为 JSON 数组');
-        return;
+        Message.error('图集格式须为数组');
+          return;
       }
+    }
+    if (payload.galleryImages === '') {
+      delete payload.galleryImages;
     }
     if (editingId) {
       await api.cmsUpdate(config.resource, editingId, payload);
@@ -134,8 +150,38 @@ export default function CmsResourcePage({ config }: Props) {
     load(page);
   };
 
+  const confirmDelete = (row: Record<string, unknown>) => {
+    Modal.confirm({
+      title: '删除内容',
+      content: `确认删除「${String(row.title || row.name || '-')}」？删除后不会在列表展示。`,
+      onOk: async () => {
+        await api.cmsDelete(config.resource, row.id as number);
+        Message.success('已删除');
+        load(page);
+      },
+    });
+  };
+
+  const imageColumnKey = config.fields.includes('coverImage')
+    ? 'cover_image'
+    : config.fields.includes('imageUrl')
+      ? 'image_url'
+      : config.fields.includes('avatarUrl')
+        ? 'avatar_url'
+        : '';
+
   const columns = [
     ...(config.showCity ? [{ title: '城市', dataIndex: 'city_name', width: 80 }] : []),
+    ...(imageColumnKey
+      ? [
+          {
+            title: '图片',
+            dataIndex: imageColumnKey,
+            width: 88,
+            render: (v: string) => (v ? <img className="admin-table-thumb" src={v} alt="" /> : <span className="empty-cell">-</span>),
+          },
+        ]
+      : []),
     {
       title: config.nameField === 'name' ? '名称' : '标题',
       dataIndex: config.nameField === 'name' ? 'name' : 'title',
@@ -154,8 +200,8 @@ export default function CmsResourcePage({ config }: Props) {
       title: '操作',
       width: 320,
       render: (_: unknown, row: Record<string, unknown>) => (
-        <>
-          <Button type="text" size="small" onClick={() => openEdit(row)}>
+        <Space size={4} wrap>
+          <Button type="text" size="small" icon={<IconEdit />} disabled={row.publish_status === 'PENDING'} onClick={() => openEdit(row)}>
             编辑
           </Button>
           {hasPermission('cms:submit') && ['DRAFT', 'OFFLINE'].includes(String(row.publish_status)) && (
@@ -174,11 +220,11 @@ export default function CmsResourcePage({ config }: Props) {
             </Button>
           )}
           {hasPermission('cms:delete') && row.publish_status !== 'PENDING' && (
-            <Button type="text" size="small" status="danger" onClick={() => api.cmsDelete(config.resource, row.id as number).then(() => load(page))}>
+            <Button type="text" size="small" status="danger" icon={<IconDelete />} onClick={() => confirmDelete(row)}>
               删除
             </Button>
           )}
-        </>
+        </Space>
       ),
     },
   ];
@@ -196,7 +242,7 @@ export default function CmsResourcePage({ config }: Props) {
         }
       />
       <Card className="page-content-card" style={{ marginBottom: 12 }}>
-        <Form layout="inline">
+        <Form layout="inline" className="admin-inline-form">
           {config.showCity && (
             <Form.Item label="城市">
               <Select
@@ -227,7 +273,18 @@ export default function CmsResourcePage({ config }: Props) {
             />
           </Form.Item>
           <Button type="primary" onClick={() => load(1)}>
+            <IconSearch />
             查询
+          </Button>
+          <Button
+            onClick={() => {
+              const empty = { keyword: '', publishStatus: '', cityId: undefined as number | undefined };
+              setFilters(empty);
+              load(1, empty);
+            }}
+          >
+            <IconRefresh />
+            重置
           </Button>
           {hasPermission('cms:batch') && selected.length > 0 && (
             <>
@@ -247,7 +304,7 @@ export default function CmsResourcePage({ config }: Props) {
           columns={columns}
           data={list}
           rowSelection={{ selectedRowKeys: selected, onChange: (keys) => setSelected(keys as number[]) }}
-          pagination={{ current: page, total, pageSize: 10, onChange: load }}
+          pagination={{ current: page, total, pageSize: 10, onChange: (nextPage) => load(nextPage) }}
         />
       </Card>
       <Modal title={editingId ? '编辑' : '新增'} visible={visible} onOk={submit} onCancel={() => setVisible(false)} style={{ width: 640 }}>
@@ -277,22 +334,22 @@ export default function CmsResourcePage({ config }: Props) {
             </Form.Item>
           )}
           {config.fields.includes('imageUrl') && (
-            <Form.Item label="图片URL" field="imageUrl" rules={[{ required: true }]}>
-              <Input placeholder="上传后粘贴 /uploads/... 或完整 URL" />
+            <Form.Item label="图片地址" field="imageUrl" rules={[{ required: true }]}>
+              <ImageUrlInput />
             </Form.Item>
           )}
           {config.fields.includes('coverImage') && (
-            <Form.Item label="封面图URL" field="coverImage">
-              <Input />
+            <Form.Item label="封面图地址" field="coverImage">
+              <ImageUrlInput />
             </Form.Item>
           )}
           {config.fields.includes('avatarUrl') && (
-            <Form.Item label="头像URL" field="avatarUrl">
-              <Input />
+            <Form.Item label="头像地址" field="avatarUrl">
+              <ImageUrlInput />
             </Form.Item>
           )}
           {config.fields.includes('galleryImages') && (
-            <Form.Item label="图集JSON" field="galleryImages" extra="数组，上传接口返回 url 填入">
+            <Form.Item label="图集" field="galleryImages" extra='数组格式，例如 ["/uploads/cms/a.jpg"]；多图上传会在下一轮补成批量控件。'>
               <Input.TextArea placeholder='["/uploads/..."]' />
             </Form.Item>
           )}

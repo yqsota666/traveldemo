@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import Taro from '@tarojs/taro';
 import TravelMap from './TravelMap';
 import FamilyProfile from './FamilyProfile';
 import { Bell } from 'lucide-react';
@@ -10,6 +11,10 @@ interface ProfileProps {
 export default function Profile({ onLogout }: ProfileProps) {
   const [showMap, setShowMap] = useState(false);
   const [showFamily, setShowFamily] = useState(false);
+
+  const showComingSoon = (title: string) => {
+    Taro.showToast({ title: `${title}即将开放`, icon: 'none' });
+  };
 
   if (showMap) {
     return <TravelMap onBack={() => setShowMap(false)} />;
@@ -63,7 +68,10 @@ export default function Profile({ onLogout }: ProfileProps) {
 
       {/* 4 Main Buttons */}
       <div className="flex flex-col gap-4 flex-1 z-10">
-        <button className="bg-white/80 backdrop-blur-sm border border-white py-5 px-6 flex items-center justify-between font-bold text-lg text-[#1A1A1A] hover:shadow-[0_8px_24px_rgba(74,140,111,0.15)] transition-all duration-300 rounded-2xl shadow-[0_4px_12px_rgba(74,140,111,0.06)] relative overflow-hidden group">
+        <button
+          onClick={() => showComingSoon('我的收藏')}
+          className="bg-white/80 backdrop-blur-sm border border-white py-5 px-6 flex items-center justify-between font-bold text-lg text-[#1A1A1A] hover:shadow-[0_8px_24px_rgba(74,140,111,0.15)] transition-all duration-300 rounded-2xl shadow-[0_4px_12px_rgba(74,140,111,0.06)] relative overflow-hidden group"
+        >
           <div className="absolute inset-0 bg-gradient-to-r from-transparent via-[#7BBF9E]/10 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000"></div>
           <span className="relative z-10 group-hover:text-[#4A8C6F] transition-colors">我的收藏</span>
           <div className="w-10 h-10 rounded-full bg-[#F5E6C8]/50 flex items-center justify-center text-[#C8963E] group-hover:bg-[#C8963E] group-hover:text-white transition-colors relative z-10">
@@ -80,7 +88,10 @@ export default function Profile({ onLogout }: ProfileProps) {
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="m9 18 6-6-6-6"/></svg>
           </div>
         </button>
-        <button className="bg-white/80 backdrop-blur-sm border border-white py-5 px-6 flex items-center justify-between font-bold text-lg text-[#1A1A1A] hover:shadow-[0_8px_24px_rgba(74,140,111,0.15)] transition-all duration-300 rounded-2xl shadow-[0_4px_12px_rgba(74,140,111,0.06)] relative overflow-hidden group">
+        <button
+          onClick={() => showComingSoon('我的订单')}
+          className="bg-white/80 backdrop-blur-sm border border-white py-5 px-6 flex items-center justify-between font-bold text-lg text-[#1A1A1A] hover:shadow-[0_8px_24px_rgba(74,140,111,0.15)] transition-all duration-300 rounded-2xl shadow-[0_4px_12px_rgba(74,140,111,0.06)] relative overflow-hidden group"
+        >
           <div className="absolute inset-0 bg-gradient-to-r from-transparent via-[#7BBF9E]/10 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000"></div>
           <span className="relative z-10 group-hover:text-[#4A8C6F] transition-colors">我的订单</span>
           <div className="w-10 h-10 rounded-full bg-[#F7C7CF]/30 flex items-center justify-center text-[#e88796] group-hover:bg-[#e88796] group-hover:text-white transition-colors relative z-10">

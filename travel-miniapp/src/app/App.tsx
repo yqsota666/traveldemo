@@ -9,17 +9,35 @@ import Consultation from './components/Consultation';
 import WishlistForm from './components/WishlistForm';
 import HotelList from './components/HotelList';
 
+const DEFAULT_BANNERS = [
+  'https://images.unsplash.com/photo-1684871430772-569936b1a0ae?w=1080',
+  'https://images.unsplash.com/photo-1614765437824-f5433016b7b6?w=1080',
+];
+
+const DEFAULT_HOT_CITIES = [
+  {
+    name: '北京',
+    num: '01',
+    img: 'https://images.unsplash.com/photo-1508804185872-d7badad00f7d?w=1080',
+  },
+  {
+    name: '西安',
+    num: '02',
+    img: 'https://images.unsplash.com/photo-1599571234909-29ed5d1321d6?w=1080',
+  },
+];
+
 export default function App() {
   const [isLoggedOut, setIsLoggedOut] = useState(false);
-  const [currentBanner, setCurrentBanner] = useState(2);
+  const [currentBanner, setCurrentBanner] = useState(0);
   const [activeTab, setActiveTab] = useState('home');
   const [selectedCity, setSelectedCity] = useState<string | null>(null);
   const [showTripReminder, setShowTripReminder] = useState(false);
   const [showConsultation, setShowConsultation] = useState(false);
   const [showHotels, setShowHotels] = useState(false);
 
-  const [banners, setBanners] = useState<string[]>([]);
-  const [hotCitiesData, setHotCitiesData] = useState<{ name: string; num: string; img: string }[]>([]);
+  const [banners, setBanners] = useState<string[]>(DEFAULT_BANNERS);
+  const [hotCitiesData, setHotCitiesData] = useState<{ name: string; num: string; img: string }[]>(DEFAULT_HOT_CITIES);
   const [recommendedScenics, setRecommendedScenics] = useState<{ id: number; title: string; cover?: string }[]>([]);
   const [consultationText, setConsultationText] = useState('在线咨询');
   const [aboutCompany, setAboutCompany] = useState<Record<string, unknown> | null>(null);
@@ -33,9 +51,8 @@ export default function App() {
       const imgs = res.records
         .map((b) => resolveMediaUrl(String(b.imageUrl || b.coverImage || '')))
         .filter(Boolean);
-      setBanners(imgs.length ? imgs : [
-        'https://images.unsplash.com/photo-1684871430772-569936b1a0ae?w=1080',
-      ]);
+      setBanners(imgs.length ? imgs : DEFAULT_BANNERS);
+      setCurrentBanner(0);
     }).catch(() => {});
     contentApi.cities().then((res) => {
       const cities = res.records.map((c, i) => ({
@@ -265,6 +282,8 @@ export default function App() {
     );
   }
 
+  const activeBanner = banners[currentBanner] || DEFAULT_BANNERS[0];
+
   return (
     <div className="h-screen flex flex-col bg-[#FDFCF8] max-w-[560px] mx-auto text-[#1A1A1A] relative overflow-hidden font-sans">
       
@@ -284,9 +303,9 @@ export default function App() {
         <div className="relative h-[300px] flex items-center justify-center overflow-hidden mb-2 group">
           {/* Background Image with Rich Overlay */}
           <div className="absolute inset-0">
-             <img 
-               src={banners[currentBanner]} 
-               alt="Banner Background" 
+             <img
+               src={activeBanner}
+               alt="轮播背景"
                className="w-full h-full object-cover sepia-[.3] saturate-150 hue-rotate-15 transition-transform duration-1000 group-hover:scale-105"
              />
              <div className="absolute inset-0 bg-gradient-to-t from-[#FDFCF8] via-transparent to-black/10"></div>
@@ -300,8 +319,10 @@ export default function App() {
             <ChevronLeft className="w-5 h-5" />
           </button>
 
-          <div className="px-8 py-3 bg-white/60 backdrop-blur-md border border-white/50 rounded-lg z-10 shadow-[0_8px_32px_rgba(74,140,111,0.2)] text-[#1A1A1A] font-bold tracking-wide transform transition-all group-hover:scale-105">
-            轮播图 {currentBanner + 1}
+          <div className="px-6 py-4 bg-white/70 backdrop-blur-md border border-white/60 rounded-2xl z-10 shadow-[0_8px_32px_rgba(74,140,111,0.2)] text-[#1A1A1A] transform transition-all group-hover:scale-105 min-w-[210px]">
+            <div className="text-[11px] text-[#4A8C6F] font-black tracking-[0.2em] mb-1">亲子文旅</div>
+            <div className="text-xl font-extrabold tracking-wide">亲子国风旅行</div>
+            <div className="text-xs text-[#1A1A1A]/60 mt-1">城市攻略 · 景点预约 · 贴心提醒</div>
           </div>
 
           <button
@@ -351,14 +372,14 @@ export default function App() {
             <h2 className="text-xl font-extrabold text-[#1A1A1A] tracking-wide">热门城市</h2>
           </div>
           <div className="flex flex-col gap-4">
-            {hotCitiesData.map((city) => (
+            {hotCitiesData.map((city, index) => (
               <button
                 key={city.name}
                 onClick={() => handleCityClick(city.name)}
                 className="relative h-28 w-full rounded-2xl overflow-hidden shadow-[0_4px_16px_rgba(123,191,158,0.15)] group transition-all duration-300 border border-white"
               >
-                <img 
-                  src={city.img} 
+                <img
+                  src={city.img || DEFAULT_HOT_CITIES[index % DEFAULT_HOT_CITIES.length].img}
                   className="absolute inset-0 w-full h-full object-cover sepia-[.2] group-hover:scale-105 transition-transform duration-700" 
                   alt={city.name} 
                 />

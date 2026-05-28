@@ -1,10 +1,15 @@
 import { ArrowLeft, Plus, Calendar, MapPin } from 'lucide-react';
+import Taro from '@tarojs/taro';
 
 interface FamilyProfileProps {
   onBack: () => void;
 }
 
 export default function FamilyProfile({ onBack }: FamilyProfileProps) {
+  const showSoon = () => {
+    Taro.showToast({ title: '家庭成员编辑将接入用户中心', icon: 'none' });
+  };
+
   const familyMembers = [
     { name: '大宝 (儿子)', birthday: '2016-08-15', places: ['北京故宫', '西安兵马俑', '上海迪士尼'] },
     { name: '二宝 (女儿)', birthday: '2020-03-22', places: ['上海迪士尼', '广州长隆'] },
@@ -19,7 +24,7 @@ export default function FamilyProfile({ onBack }: FamilyProfileProps) {
           <ArrowLeft className="w-5 h-5" />
         </button>
         <h1 className="text-xl font-extrabold text-[#4A8C6F]">家庭档案</h1>
-        <button className="p-2 hover:bg-[#F5E6C8]/40 rounded-full text-[#4A8C6F] transition-colors">
+        <button onClick={showSoon} className="p-2 hover:bg-[#F5E6C8]/40 rounded-full text-[#4A8C6F] transition-colors">
           <Plus className="w-5 h-5" />
         </button>
       </div>
@@ -72,7 +77,7 @@ export default function FamilyProfile({ onBack }: FamilyProfileProps) {
           </div>
         ))}
 
-        <button className="w-full mt-4 py-4 rounded-xl border-2 border-dashed border-[#7BBF9E]/40 text-[#4A8C6F] font-bold flex items-center justify-center gap-2 hover:bg-[#7BBF9E]/10 transition-colors">
+        <button onClick={showSoon} className="w-full mt-4 py-4 rounded-xl border-2 border-dashed border-[#7BBF9E]/40 text-[#4A8C6F] font-bold flex items-center justify-center gap-2 hover:bg-[#7BBF9E]/10 transition-colors">
           <Plus className="w-5 h-5" />
           添加家庭成员
         </button>

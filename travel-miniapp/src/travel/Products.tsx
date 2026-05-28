@@ -2,17 +2,17 @@ import { Image, Input, ScrollView, Text, View } from "@tarojs/components";
 import { useState } from "react";
 import { SearchIcon } from "./icons";
 
-const CITIES = ["Beijing", "Xi'an", "Shanghai", "Guangzhou", "Chengdu", "Hangzhou"];
+const CITIES = ["北京", "西安", "上海", "广州", "成都", "杭州"];
 
 const PRODUCTS: Record<string, Array<{ id: number; name: string; desc: string; price: string; img: string }>> = {
-  Beijing: [
-    { id: 1, name: "Forbidden City Cat Magnet", desc: "Cute and exquisite, bring the Forbidden City home", price: "¥39", img: "https://images.unsplash.com/photo-1599813876020-0082ea5743fb?q=80&w=400&auto=format&fit=crop" },
-    { id: 2, name: "Great Wall Canvas Bag", desc: "Minimalist lines outlining the Great Wall", price: "¥59", img: "https://images.unsplash.com/photo-1508804185872-d7badad00f7d?q=80&w=400&auto=format&fit=crop" },
-    { id: 3, name: "Peking Opera Bookmark", desc: "Traditional culture, hollow craft", price: "¥25", img: "https://images.unsplash.com/photo-1580665355088-75051a24911f?q=80&w=400&auto=format&fit=crop" },
+  北京: [
+    { id: 1, name: "故宫猫咪冰箱贴", desc: "精巧可爱，把故宫记忆带回家", price: "¥39", img: "https://images.unsplash.com/photo-1599813876020-0082ea5743fb?q=80&w=400&auto=format&fit=crop" },
+    { id: 2, name: "长城帆布袋", desc: "以简洁线条勾勒长城风貌", price: "¥59", img: "https://images.unsplash.com/photo-1508804185872-d7badad00f7d?q=80&w=400&auto=format&fit=crop" },
+    { id: 3, name: "京剧纹样书签", desc: "传统文化纹样，镂空工艺", price: "¥25", img: "https://images.unsplash.com/photo-1580665355088-75051a24911f?q=80&w=400&auto=format&fit=crop" },
   ],
-  "Xi'an": [
-    { id: 4, name: "Terracotta Warrior Figurine", desc: "Hand-polished, recreating the Qin dynasty", price: "¥89", img: "https://images.unsplash.com/photo-1563804812328-8686d420fec7?q=80&w=400&auto=format&fit=crop" },
-    { id: 5, name: "Big Wild Goose Pagoda Postcards", desc: "Ancient Chang'an charm", price: "¥35", img: "https://images.unsplash.com/photo-1584680238861-1250325d7c86?q=80&w=400&auto=format&fit=crop" },
+  西安: [
+    { id: 4, name: "兵马俑摆件", desc: "手工打磨，再现秦风气象", price: "¥89", img: "https://images.unsplash.com/photo-1563804812328-8686d420fec7?q=80&w=400&auto=format&fit=crop" },
+    { id: 5, name: "大雁塔明信片", desc: "长安古韵，纸上留念", price: "¥35", img: "https://images.unsplash.com/photo-1584680238861-1250325d7c86?q=80&w=400&auto=format&fit=crop" },
   ],
 };
 
@@ -21,8 +21,8 @@ export default function Products() {
   const [searchQuery, setSearchQuery] = useState("");
 
   const currentProducts = PRODUCTS[activeCity] || [
-    { id: 99, name: `${activeCity} Limited Canvas Bag`, desc: "City theme, simple and versatile", price: "¥49", img: "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?q=80&w=400&auto=format&fit=crop" },
-    { id: 100, name: `${activeCity} Commemorative Badge`, desc: "Metal material, commemorative design", price: "¥29", img: "https://images.unsplash.com/photo-1618306917637-293693e50cd8?q=80&w=400&auto=format&fit=crop" },
+    { id: 99, name: `${activeCity}限定帆布袋`, desc: "城市主题，简洁百搭", price: "¥49", img: "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?q=80&w=400&auto=format&fit=crop" },
+    { id: 100, name: `${activeCity}纪念徽章`, desc: "金属材质，纪念设计", price: "¥29", img: "https://images.unsplash.com/photo-1618306917637-293693e50cd8?q=80&w=400&auto=format&fit=crop" },
   ];
 
   return (
@@ -37,7 +37,7 @@ export default function Products() {
           <SearchIcon className="w-5 h-5 text-[#4A8C6F] mr-3 shrink-0" />
           <Input
             className="flex-1 bg-transparent text-[#1A1A1A] font-medium min-w-0"
-            placeholder="Search products..."
+            placeholder="搜索文创产品..."
             value={searchQuery}
             onInput={e => setSearchQuery(e.detail.value)}
           />
@@ -65,7 +65,7 @@ export default function Products() {
             <Text className="font-extrabold text-xl text-[#4A8C6F] block mb-4">
               {activeCity}
               {" "}
-              Recommended
+              推荐文创
             </Text>
             {currentProducts.map(product => (
               <View key={product.id} className="rounded-2xl bg-white border border-white shadow-[0_8px_20px_rgba(74,140,111,0.06)] overflow-hidden">
@@ -76,7 +76,7 @@ export default function Products() {
                   <View className="flex items-center justify-between mt-3">
                     <Text className="font-black text-xl text-[#C8963E]">{product.price}</Text>
                     <View className="bg-gradient-to-r from-[#4A8C6F] to-[#7BBF9E] text-white px-4 py-1.5 text-xs font-extrabold rounded-full">
-                      Buy
+                      购买
                     </View>
                   </View>
                 </View>

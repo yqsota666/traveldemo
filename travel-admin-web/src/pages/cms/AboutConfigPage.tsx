@@ -1,8 +1,21 @@
-import { Button, Card, Form, Input, Message } from '@arco-design/web-react';
+import { Button, Card, Form, Input, Message, Tag } from '@arco-design/web-react';
 import PageHeader from '../../components/PageHeader';
 import { useEffect, useState } from 'react';
+import ImageUrlInput from '../../components/ImageUrlInput';
 import { api } from '../../services/api';
 import { useAuth } from '../../hooks/useAuth';
+
+const STATUS_MAP: Record<string, { color: string; label: string }> = {
+  DRAFT: { color: 'gray', label: '草稿' },
+  PENDING: { color: 'orange', label: '待审核' },
+  PUBLISHED: { color: 'green', label: '已上架' },
+  OFFLINE: { color: 'red', label: '已下架' },
+};
+
+function statusTag(status: string) {
+  const meta = STATUS_MAP[status] || { color: 'gray', label: status || '未配置' };
+  return <Tag color={meta.color}>{meta.label}</Tag>;
+}
 
 export default function AboutConfigPage() {
   const { hasPermission, hasRole } = useAuth();
@@ -38,17 +51,17 @@ export default function AboutConfigPage() {
 
   return (
     <div>
-      <PageHeader title="About Us - 公司简介" extra={<span>状态: {status}</span>} />
+      <PageHeader title="公司简介" extra={statusTag(status)} />
       <Card className="page-content-card">
         <Form form={form} layout="vertical" style={{ maxWidth: 640 }}>
           <Form.Item label="标题" field="title" rules={[{ required: true }]}>
             <Input />
           </Form.Item>
-          <Form.Item label="Logo URL" field="logoUrl">
-            <Input />
+          <Form.Item label="标识图片地址" field="logoUrl">
+            <ImageUrlInput />
           </Form.Item>
           <Form.Item label="封面图" field="coverImage">
-            <Input />
+            <ImageUrlInput />
           </Form.Item>
           <Form.Item label="详细介绍" field="longText" rules={[{ required: true }]}>
             <Input.TextArea rows={6} />
@@ -66,12 +79,12 @@ export default function AboutConfigPage() {
               保存
             </Button>
           )}
-          {hasPermission('cms:submit') && (
+          {hasPermission('cms:submit') && ['DRAFT', 'OFFLINE'].includes(status) && (
             <Button onClick={() => api.cmsSubmitAbout().then(() => { Message.success('已提交审核'); load(); })}>
               提交审核
             </Button>
           )}
-          {canApprove && (
+          {canApprove && status === 'PENDING' && (
             <Button status="success" onClick={() => api.cmsApproveAbout().then(() => { Message.success('已通过'); load(); })}>
               审核通过
             </Button>

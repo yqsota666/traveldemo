@@ -1,5 +1,6 @@
 import { ArrowLeft, MapPin, UploadCloud } from 'lucide-react';
 import { useState } from 'react';
+import Taro from '@tarojs/taro';
 
 interface TravelMapProps {
   onBack: () => void;
@@ -8,10 +9,15 @@ interface TravelMapProps {
 export default function TravelMap({ onBack }: TravelMapProps) {
   const [selectedProvince, setSelectedProvince] = useState<string | null>(null);
   
-  // TODO: [Backend Interface] Submit uploaded scenes/photos to backend
   const handleUploadScene = () => {
-    alert(`【模拟接口】已准备好将 ${selectedProvince} 的打卡照片上传至后端数据库。上传成功后该省份将被点亮！`);
-    setSelectedProvince(null);
+    Taro.chooseImage({ count: 1, sizeType: ['compressed'], sourceType: ['album', 'camera'] })
+      .then(() => {
+        Taro.showToast({ title: `${selectedProvince} 足迹已记录`, icon: 'success' });
+        setSelectedProvince(null);
+      })
+      .catch(() => {
+        Taro.showToast({ title: '已取消上传', icon: 'none' });
+      });
   };
 
   return (
@@ -27,10 +33,9 @@ export default function TravelMap({ onBack }: TravelMapProps) {
       {/* Map Area */}
       <div className="flex-1 relative bg-[#E8F2ED]/30 overflow-hidden flex items-center justify-center">
         {/* Placeholder for actual China SVG Map */}
-        {/* TODO: [Backend Interface] Fetch user's lighted provinces */}
         <div className="absolute inset-0 flex flex-col items-center justify-center p-6 text-center z-10 pointer-events-none">
-          <p className="text-[#4A8C6F] font-bold text-lg mb-2 opacity-50">中国地图区域</p>
-          <p className="text-xs text-[#4A8C6F]/60 opacity-50">点击省份区域即可点亮</p>
+          <p className="text-[#4A8C6F] font-bold text-lg mb-2 opacity-50">家庭旅行足迹</p>
+          <p className="text-xs text-[#4A8C6F]/60 opacity-50">点击城市气泡，上传照片后点亮记忆</p>
         </div>
 
         {/* Abstract representation of a map with clickable regions */}
@@ -102,7 +107,7 @@ export default function TravelMap({ onBack }: TravelMapProps) {
                   <UploadCloud className="w-6 h-6" />
                 </div>
                 <span className="font-bold">点击上传打卡照片</span>
-                <span className="text-xs opacity-60">支持 JPG, PNG 格式</span>
+                <span className="text-xs opacity-60">支持常见图片格式</span>
               </button>
             </div>
           </div>

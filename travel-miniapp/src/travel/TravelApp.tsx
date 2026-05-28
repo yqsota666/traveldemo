@@ -40,10 +40,10 @@ export default function TravelApp() {
   const renderBottomNav = () => (
     <View className="fixed bottom-0 left-0 right-0 bg-[#FDFCF8]/95 border-t border-[#7BBF9E]/20 shadow-[0_-4px_20px_rgba(74,140,111,0.08)] grid grid-cols-4 z-30 pb-safe">
       {([
-        { key: "home" as const, label: "Home", Icon: HomeIcon },
-        { key: "products" as const, label: "Products", Icon: ShoppingBagIcon },
-        { key: "about" as const, label: "About Us", Icon: InfoIcon },
-        { key: "profile" as const, label: "My", Icon: UserIcon },
+        { key: "home" as const, label: "首页", Icon: HomeIcon },
+        { key: "products" as const, label: "文创", Icon: ShoppingBagIcon },
+        { key: "about" as const, label: "关于我们", Icon: InfoIcon },
+        { key: "profile" as const, label: "我的", Icon: UserIcon },
       ]).map(({ key, label, Icon }) => (
         <View
           key={key}
@@ -84,7 +84,7 @@ export default function TravelApp() {
     return (
       <View className="h-screen flex flex-col bg-[#FDFCF8] max-w-[560px] mx-auto relative text-[#1A1A1A]">
         <View className="flex-1 flex items-center justify-center">
-          <Text className="font-bold text-xl text-[#4A8C6F]">About Us (开发中)</Text>
+          <Text className="font-bold text-xl text-[#4A8C6F]">关于我们</Text>
         </View>
         {renderBottomNav()}
       </View>
@@ -104,7 +104,7 @@ export default function TravelApp() {
       </View>
 
       <View className="relative flex items-center justify-center px-4 py-4 z-10 border-b border-[#7BBF9E]/10 bg-[#FDFCF8]/60">
-        <Text className="text-xl font-extrabold text-[#4A8C6F] tracking-wider">Home</Text>
+        <Text className="text-xl font-extrabold text-[#4A8C6F] tracking-wider">首页</Text>
       </View>
 
       <ScrollView scrollY className="relative z-10 w-full" style={{ height: `${scrollHeight}px` }}>
@@ -119,7 +119,7 @@ export default function TravelApp() {
 
           <View className="px-8 py-3 bg-white/60 border border-white/50 rounded-lg z-10">
             <Text className="text-[#1A1A1A] font-bold">
-              Banner
+              轮播图
               {currentBanner + 1}
             </Text>
           </View>
@@ -141,14 +141,14 @@ export default function TravelApp() {
         <View className="px-4 py-4">
           <View className="rounded-2xl bg-gradient-to-br from-white to-[#F5E6C8]/40 border border-white p-4 flex items-center shadow-[0_8px_24px_rgba(200,150,62,0.12)]">
             <View className="bg-gradient-to-r from-[#4A8C6F] to-[#7BBF9E] text-white px-3 py-1.5 text-xs font-bold mr-4 rounded-lg shrink-0">
-              Reminder
+              行程提醒
             </View>
             <View className="flex flex-col">
               <View className="flex items-center gap-3 mb-1">
-                <Text className="font-extrabold text-base">Beijing</Text>
-                <Text className="text-sm font-medium text-[#4A8C6F]">Sunny 25°C</Text>
+                <Text className="font-extrabold text-base">北京</Text>
+                <Text className="text-sm font-medium text-[#4A8C6F]">晴 25°C</Text>
               </View>
-              <Text className="text-[#1A1A1A]/60 text-xs">Don&apos;t forget to pack your passport!</Text>
+              <Text className="text-[#1A1A1A]/60 text-xs">记得携带身份证件与儿童常用物品</Text>
             </View>
           </View>
         </View>
@@ -156,10 +156,10 @@ export default function TravelApp() {
         <View className="px-5 py-6">
           <View className="flex items-center gap-3 mb-5">
             <View className="w-1.5 h-6 bg-gradient-to-b from-[#4A8C6F] to-[#7BBF9E] rounded-full" />
-            <Text className="text-xl font-extrabold">Hot Cities</Text>
+            <Text className="text-xl font-extrabold">热门城市</Text>
           </View>
           <View className="grid grid-cols-3 gap-3">
-            {["Beijing", "Xi'an", "Shanghai"].map(city => (
+            {["北京", "西安", "上海"].map(city => (
               <View
                 key={city}
                 className="rounded-xl bg-white border border-white shadow-[0_4px_16px_rgba(123,191,158,0.1)] h-16 flex items-center justify-center"
@@ -174,15 +174,15 @@ export default function TravelApp() {
         <View className="px-5 py-2">
           <View className="flex items-center gap-3 mb-5">
             <View className="w-1.5 h-6 bg-gradient-to-b from-[#C8963E] to-[#F5E6C8] rounded-full" />
-            <Text className="text-xl font-extrabold">Recommended Hotels</Text>
+            <Text className="text-xl font-extrabold">精选客栈</Text>
           </View>
           <View className="relative h-48 rounded-2xl overflow-hidden shadow-[0_8px_24px_rgba(200,150,62,0.15)]">
             <Image className="w-full h-full" src={HOTEL_IMG} mode="aspectFill" />
             <View className="absolute inset-0 bg-gradient-to-t from-[#1A1A1A]/80 via-transparent to-transparent" />
             <View className="absolute bottom-5 left-5 right-5 flex justify-between items-end">
               <View>
-                <Text className="text-white/80 text-xs font-bold block mb-1">FEATURED</Text>
-                <Text className="text-white font-extrabold text-lg">Explore Top Stays</Text>
+                <Text className="text-white/80 text-xs font-bold block mb-1">推荐</Text>
+                <Text className="text-white font-extrabold text-lg">探索绝佳住所</Text>
               </View>
               <View className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center text-white">›</View>
             </View>
@@ -192,7 +192,7 @@ export default function TravelApp() {
         <View className="px-5 py-8 pb-32">
           <View className="flex items-center gap-3 mb-5">
             <View className="w-1.5 h-6 bg-gradient-to-b from-[#F7C7CF] to-white rounded-full" />
-            <Text className="text-xl font-extrabold">Popular Destinations</Text>
+            <Text className="text-xl font-extrabold">热门景点</Text>
           </View>
           <View className="grid grid-cols-2 gap-4">
             {[1, 2].map(item => (
@@ -201,7 +201,7 @@ export default function TravelApp() {
                   0
                   {item}
                 </Text>
-                <Text className="font-extrabold text-lg">Destination {item}</Text>
+                <Text className="font-extrabold text-lg">景点 {item}</Text>
               </View>
             ))}
           </View>
@@ -210,17 +210,17 @@ export default function TravelApp() {
 
       <View
         className="fixed bottom-24 right-5 flex items-center gap-2.5 px-5 py-3.5 bg-gradient-to-r from-[#4A8C6F] to-[#7BBF9E] text-white rounded-full font-bold z-40"
-        onClick={() => Taro.showToast({ title: "Consultation", icon: "none" })}
+        onClick={() => Taro.showToast({ title: "在线咨询", icon: "none" })}
       >
         <MessageCircleIcon className="w-5 h-5" />
-        <Text>Consultation</Text>
+        <Text>在线咨询</Text>
       </View>
 
       <View className="fixed top-20 left-1/2 flex items-center gap-2 px-5 py-2.5 bg-white/90 text-[#4A8C6F] border border-white rounded-full z-50 font-bold -translate-x-1/2">
         <View className="w-5 h-5 rounded-full bg-[#4A8C6F] text-white flex items-center justify-center">
           <CheckIcon className="w-3 h-3" />
         </View>
-        <Text className="text-sm">Refreshing...</Text>
+        <Text className="text-sm">正在刷新...</Text>
       </View>
 
       {renderBottomNav()}

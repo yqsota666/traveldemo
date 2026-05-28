@@ -12,7 +12,7 @@ export default function Profile() {
 
       <View className="bg-gradient-to-br from-[#7BBF9E]/20 to-[#F5E6C8]/30 border border-white p-5 flex justify-between items-center mb-8 h-32 rounded-2xl shadow-[0_8px_32px_rgba(74,140,111,0.12)] relative z-10">
         <View className="flex flex-col z-10">
-          <Text className="text-[#4A8C6F] font-bold text-sm mb-1">My Points</Text>
+          <Text className="text-[#4A8C6F] font-bold text-sm mb-1">我的积分</Text>
           <Text className="text-3xl font-black text-[#C8963E]">2,450</Text>
         </View>
         <Image className="w-20 h-20 rounded-full border-3 border-white shadow-[0_8px_16px_rgba(74,140,111,0.2)]" src={AVATAR_IMG} mode="aspectFill" />
@@ -20,24 +20,24 @@ export default function Profile() {
 
       <View className="flex flex-col gap-4 flex-1 z-10">
         <View className="bg-white/80 border border-white py-6 px-6 flex items-center justify-between font-bold text-lg rounded-2xl shadow-[0_4px_12px_rgba(74,140,111,0.06)]">
-          <Text>Favorites</Text>
+          <Text>我的收藏</Text>
           <View className="w-10 h-10 rounded-full bg-[#F5E6C8]/50 flex items-center justify-center text-[#C8963E]">›</View>
         </View>
         <View
           className="bg-white/80 border border-white py-6 px-6 flex items-center justify-between font-bold text-lg rounded-2xl shadow-[0_4px_12px_rgba(74,140,111,0.06)]"
           onClick={() => Taro.navigateTo({ url: "/pages/travel-map/index" })}
         >
-          <Text>Travel Map</Text>
+          <Text>旅行地图</Text>
           <View className="w-10 h-10 rounded-full bg-[#7BBF9E]/20 flex items-center justify-center text-[#4A8C6F]">›</View>
         </View>
         <View className="bg-white/80 border border-white py-6 px-6 flex items-center justify-between font-bold text-lg rounded-2xl shadow-[0_4px_12px_rgba(74,140,111,0.06)]">
-          <Text>My Bookings</Text>
+          <Text>我的订单</Text>
           <View className="w-10 h-10 rounded-full bg-[#F7C7CF]/30 flex items-center justify-center text-[#e88796]">›</View>
         </View>
       </View>
 
       <View className="flex justify-center mt-12 mb-8 z-10">
-        <View className="bg-white text-[#1A1A1A] px-12 py-3.5 rounded-full font-bold border border-[#F7C7CF]/50">Logout</View>
+        <View className="bg-white text-[#1A1A1A] px-12 py-3.5 rounded-full font-bold border border-[#F7C7CF]/50">退出登录</View>
       </View>
     </View>
   );
