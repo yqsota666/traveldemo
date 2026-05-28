@@ -20,8 +20,12 @@ export interface PageResult<T> {
   pageSize: number;
 }
 
+// 开发环境固定走相对路径 /api，经 Vite 代理到后端，本机只需转发 5174
+const apiBase =
+  import.meta.env.DEV ? '' : (import.meta.env.VITE_API_BASE ?? '');
+
 const request = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE,
+  baseURL: apiBase,
   timeout: 15000,
 });
 
@@ -43,13 +47,31 @@ request.interceptors.response.use(
     return response;
   },
   (error) => {
+    const onLoginPage = window.location.pathname.includes('/login');
+    const isAuthMe = String(error.config?.url || '').includes('/auth/me');
+
     if (error.response?.status === 401) {
       clearToken();
-      if (!window.location.pathname.includes('/login')) {
+      if (!onLoginPage) {
         window.location.href = '/login';
       }
     }
-    Message.error(error.response?.data?.message || error.message || '网络错误');
+
+    // 登录页加载时 /me 未登录属正常，不弹全局错误（易与「密码错误」混淆）
+    if (onLoginPage && isAuthMe) {
+      return Promise.reject(error);
+    }
+
+    const body = error.response?.data;
+    const isNetwork =
+      !error.response &&
+      (error.code === 'ERR_NETWORK' || error.message === 'Network Error');
+    const msg = isNetwork
+      ? '无法连接后端：请确认 Cursor 已转发端口 5174，并访问 http://localhost:5174/login'
+      : (typeof body === 'object' && body !== null && 'message' in body && String(body.message)) ||
+        error.message ||
+        '网络错误';
+    Message.error(msg);
     return Promise.reject(error);
   }
 );

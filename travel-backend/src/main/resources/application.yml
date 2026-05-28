@@ -22,3 +22,8 @@ travel:
     wx-appid: ""
     wx-secret: ""
     mock-wx-enabled: true
+  content:
+    admin-base-url: http://127.0.0.1:8091
+    internal-token: travel-internal-cms-token
+    connect-timeout-ms: 5000
+    read-timeout-ms: 15000

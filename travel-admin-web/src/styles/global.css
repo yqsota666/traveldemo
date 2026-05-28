@@ -27,10 +27,12 @@ body {
 .login-page {
   min-height: 100vh;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
   background: var(--color-bg);
-  padding: 24px;
+  padding: 48px 24px 24px;
+  overflow-y: auto;
+  box-sizing: border-box;
 }
 
 .login-card {
@@ -132,6 +134,21 @@ body {
 .admin-sider .arco-menu {
   flex: 1;
   background: transparent;
+  overflow-y: auto;
+}
+
+.admin-side-menu .admin-submenu-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.admin-side-menu .arco-menu-inline-header {
+  font-weight: 500;
+}
+
+.admin-side-menu .arco-menu-item.arco-menu-item-indent {
+  padding-left: 40px !important;
 }
 
 .admin-header {

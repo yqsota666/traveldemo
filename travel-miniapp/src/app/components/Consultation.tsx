@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { contentApi } from '../../api/content/travelContentClient';
 import { ArrowLeft, Send, User, MessageCircle, X } from 'lucide-react';
 
 interface ConsultationProps {
@@ -12,6 +13,13 @@ export default function Consultation({ onClose }: ConsultationProps) {
     { id: 1, type: 'system', text: '您好，您的专属旅行管家正在为您服务！请问有什么可以帮您？' }
   ]);
   const [inputText, setInputText] = useState('');
+  const [contactPhone, setContactPhone] = useState('');
+
+  useEffect(() => {
+    contentApi.consultation().then((c) => {
+      if (c.contactPhone) setContactPhone(String(c.contactPhone));
+    }).catch(() => {});
+  }, []);
 
   const handleSubmitDemand = () => {
     if (!demand.trim()) return;
@@ -44,7 +52,10 @@ export default function Consultation({ onClose }: ConsultationProps) {
             <div className="p-1.5 bg-[#7BBF9E]/20 rounded-lg text-[#4A8C6F]">
               <MessageCircle className="w-5 h-5" />
             </div>
-            <h2 className="font-extrabold text-lg text-[#1A1A1A]">在线咨询</h2>
+            <div>
+              <h2 className="font-extrabold text-lg text-[#1A1A1A]">在线咨询</h2>
+              {contactPhone && <p className="text-xs text-[#4A8C6F] mt-0.5">联系电话：{contactPhone}</p>}
+            </div>
           </div>
           <button onClick={onClose} className="p-2 hover:bg-[#F5E6C8]/40 rounded-full text-[#1A1A1A]/40 transition-colors">
             <X className="w-5 h-5" />

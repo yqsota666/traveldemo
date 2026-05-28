@@ -108,4 +108,70 @@ export const api = {
 
   operationLogs: (params: Record<string, unknown>) =>
     request.get('/api/admin/v1/logs/operation', { params }),
+
+  cmsCityOptions: () => request.get<ApiResponse<{ id: number; name: string }[]>>('/api/admin/v1/cms/cities/options'),
+
+  cmsList: (resource: string, params: Record<string, unknown>) =>
+    request.get<ApiResponse<PageResult<Record<string, unknown>>>>(`/api/admin/v1/cms/${resource}`, { params }),
+
+  cmsCreate: (resource: string, data: Record<string, unknown>) =>
+    request.post<ApiResponse<Record<string, unknown>>>(`/api/admin/v1/cms/${resource}`, data),
+
+  cmsUpdate: (resource: string, id: number, data: Record<string, unknown>) =>
+    request.put<ApiResponse<Record<string, unknown>>>(`/api/admin/v1/cms/${resource}/${id}`, data),
+
+  cmsDelete: (resource: string, id: number) =>
+    request.delete(`/api/admin/v1/cms/${resource}/${id}`),
+
+  cmsSubmit: (resource: string, id: number) =>
+    request.post(`/api/admin/v1/cms/${resource}/${id}/submit`),
+
+  cmsApprove: (resource: string, id: number, comment?: string) =>
+    request.post(`/api/admin/v1/cms/${resource}/${id}/approve`, comment ? { comment } : {}),
+
+  cmsOffline: (resource: string, id: number) =>
+    request.post(`/api/admin/v1/cms/${resource}/${id}/offline`),
+
+  cmsBatchDelete: (resource: string, ids: number[]) =>
+    request.post(`/api/admin/v1/cms/${resource}/batch-delete`, { ids }),
+
+  cmsBatchSubmit: (resource: string, ids: number[]) =>
+    request.post(`/api/admin/v1/cms/${resource}/batch-submit`, { ids }),
+
+  cmsAboutCompany: () =>
+    request.get<ApiResponse<Record<string, unknown>>>('/api/admin/v1/cms/about/company'),
+
+  cmsSaveAboutCompany: (data: Record<string, unknown>) =>
+    request.put('/api/admin/v1/cms/about/company', data),
+
+  cmsSubmitAbout: () => request.post('/api/admin/v1/cms/about/company/submit'),
+
+  cmsApproveAbout: () => request.post('/api/admin/v1/cms/about/company/approve'),
+
+  cmsConsultation: () =>
+    request.get<ApiResponse<Record<string, unknown>>>('/api/admin/v1/cms/consultation'),
+
+  cmsSaveConsultation: (data: Record<string, unknown>) =>
+    request.put('/api/admin/v1/cms/consultation', data),
+
+  cmsSubmitConsultation: () => request.post('/api/admin/v1/cms/consultation/submit'),
+
+  cmsApproveConsultation: () => request.post('/api/admin/v1/cms/consultation/approve'),
+
+  cmsUpload: (file: File) => {
+    const fd = new FormData();
+    fd.append('file', file);
+    return request.post<ApiResponse<{ url: string }>>('/api/admin/v1/cms/upload', fd, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    });
+  },
 };
+
+export interface CmsResourceConfig {
+  resource: string;
+  title: string;
+  nameField: 'name' | 'title';
+  showCity: boolean;
+  cityRequired: boolean;
+  fields: string[];
+}

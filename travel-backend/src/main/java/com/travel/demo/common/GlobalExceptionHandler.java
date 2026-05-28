@@ -22,8 +22,13 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
-    public ApiResponse<?> handleBusinessException(IllegalArgumentException ex) {
+    public ApiResponse<?> handleIllegalArgument(IllegalArgumentException ex) {
         return ApiResponse.fail(400, ex.getMessage());
+    }
+
+    @ExceptionHandler(BusinessException.class)
+    public ApiResponse<?> handleBusinessException(BusinessException ex) {
+        return ApiResponse.fail(ex.getCode(), ex.getMessage());
     }
 
     @ExceptionHandler(Exception.class)

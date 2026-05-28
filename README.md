@@ -49,6 +49,6 @@ cd ../../travel-admin-backend && mvn spring-boot:run
 cd ../travel-admin-web && npm install && npm run dev
 ```
 
-数据库脚本位于 `travel-admin-backend/scripts/sql/`。演示账号：`superadmin` / `director01` / `sales01`，密码 `admin123`。
+数据库脚本位于 `travel-admin-backend/scripts/sql/`。测试账号与密码见 **[docs/管理后台测试账号.md](docs/管理后台测试账号.md)**（勿使用已废弃的 `admin123`）。
 
 **新服务器要装什么软件、要执行哪些下载命令**：见 [docs/新服务器部署依赖清单.md](docs/新服务器部署依赖清单.md)（MySQL、Java、Maven、Node、npm 依赖说明等）。

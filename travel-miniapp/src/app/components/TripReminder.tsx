@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { contentApi } from '../../api/content/travelContentClient';
 import { ArrowLeft, CloudSun, Shirt, AlertCircle, Map as MapIcon, BookOpen, MapPin, Utensils, ClipboardList, Clock } from 'lucide-react';
 
 interface TripReminderProps {
@@ -6,6 +7,22 @@ interface TripReminderProps {
 }
 
 export default function TripReminder({ onBack }: TripReminderProps) {
+  const [tripTitle, setTripTitle] = useState('行程贴士与安排');
+  const [weatherCity, setWeatherCity] = useState('北京');
+  const [weatherHint, setWeatherHint] = useState('晴 25°C');
+  const [contentText, setContentText] = useState('');
+
+  useEffect(() => {
+    contentApi.tripReminders({ pageSize: 1 }).then((res) => {
+      const t = res.records[0];
+      if (!t) return;
+      setTripTitle(String(t.title || '行程贴士与安排'));
+      setWeatherCity(String(t.cityName || '北京'));
+      setWeatherHint(String(t.weatherHint || '晴 25°C'));
+      setContentText(String(t.content || ''));
+    }).catch(() => {});
+  }, []);
+
   return (
     <div className="h-screen flex flex-col bg-[#FDFCF8] text-[#1A1A1A] absolute inset-0 z-50 overflow-hidden font-sans">
       {/* Header */}
@@ -13,7 +30,7 @@ export default function TripReminder({ onBack }: TripReminderProps) {
         <button onClick={onBack} className="p-2 hover:bg-[#F5E6C8]/40 rounded-full text-[#4A8C6F] transition-colors">
           <ArrowLeft className="w-5 h-5" />
         </button>
-        <h1 className="text-xl font-extrabold text-[#4A8C6F] ml-2">行程贴士与安排</h1>
+        <h1 className="text-xl font-extrabold text-[#4A8C6F] ml-2">{tripTitle}</h1>
       </div>
 
       <div className="flex-1 overflow-y-auto pb-24 p-5 space-y-5 relative z-10 scrollbar-hide">
@@ -32,11 +49,12 @@ export default function TripReminder({ onBack }: TripReminderProps) {
              <div className="p-1.5 bg-white/50 rounded-lg backdrop-blur-sm">
                 <CloudSun className="w-5 h-5 text-[#4A8C6F]" />
              </div>
-             <h2 className="font-extrabold text-lg text-[#1A1A1A]">实时天气 (北京)</h2>
+             <h2 className="font-extrabold text-lg text-[#1A1A1A]">实时天气 ({weatherCity})</h2>
            </div>
            <div className="relative z-10 mt-3">
-             <div className="text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-[#4A8C6F] to-[#7BBF9E] mb-2 drop-shadow-sm">25°C <span className="text-2xl ml-1 text-[#4A8C6F]/80">晴</span></div>
-             <p className="text-sm font-medium text-[#1A1A1A]/70">微风 2级 | 湿度 45% | 紫外线强</p>
+             <div className="text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-[#4A8C6F] to-[#7BBF9E] mb-2 drop-shadow-sm">{weatherHint}</div>
+             {contentText && <p className="text-sm font-medium text-[#1A1A1A]/70">{contentText}</p>}
+             {!contentText && <p className="text-sm font-medium text-[#1A1A1A]/70">微风 2级 | 湿度 45% | 紫外线强</p>}
            </div>
         </div>
 

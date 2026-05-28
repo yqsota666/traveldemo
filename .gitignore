@@ -18,8 +18,12 @@ travel-miniapp/node_modules/
 travel-admin-web/node_modules/
 travel-admin-web/dist/
 travel-admin-backend/target/
+travel-admin-backend/uploads/
 figma-source/
 figma-taro-source/
+
+# 本地测试账号（含明文密码，勿提交）
+docs/管理后台测试账号.md
 
 # IDE / OS
 .idea/

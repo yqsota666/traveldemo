@@ -4,6 +4,10 @@ server:
 spring:
   application:
     name: travel-admin-backend
+  servlet:
+    multipart:
+      max-file-size: 5MB
+      max-request-size: 6MB
   datasource:
     url: jdbc:mysql://127.0.0.1:3306/travel_demo?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai
     username: root
@@ -16,3 +20,9 @@ admin:
   jwt:
     secret: zB3Bkdl6XJxPwpq-2DvyBRErgFtYEsOlRNiUdqZoe7EI6xQFmycQw0sTJ5Z7fthf
     expire-seconds: 28800
+  upload:
+    dir: ./uploads
+    max-bytes: 2097152
+    public-prefix: /uploads/
+  internal:
+    token: travel-internal-cms-token

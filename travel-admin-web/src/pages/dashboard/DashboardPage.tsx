@@ -14,10 +14,13 @@ export default function DashboardPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    api.dashboardStats().then((res) => {
-      setStats(res.data.result);
-      setLoading(false);
-    });
+    api
+      .dashboardStats()
+      .then((res) => {
+        setStats(res.data.result ?? {});
+      })
+      .catch(() => setStats({}))
+      .finally(() => setLoading(false));
   }, []);
 
   if (loading) return <Spin style={{ display: 'block', margin: '80px auto' }} />;

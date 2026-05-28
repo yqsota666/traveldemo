@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { contentApi, resolveMediaUrl } from '../api/content/travelContentClient';
 import { Home, User, ChevronLeft, ChevronRight, Check, Info, ShoppingBag } from 'lucide-react';
 import CityDetail from './components/CityDetail';
 import Profile from './components/Profile';
@@ -17,18 +18,59 @@ export default function App() {
   const [showConsultation, setShowConsultation] = useState(false);
   const [showHotels, setShowHotels] = useState(false);
 
-  // TODO: [Backend Interface] Fetch banner images and configure via API
-  const banners = [
-    "https://images.unsplash.com/photo-1684871430772-569936b1a0ae?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxjaGluZXNlJTIwd2F0ZXJjb2xvciUyMG1vdW50YWluJTIwbmF0dXJlJTIwbGFuZHNjYXBlfGVufDF8fHx8MTc3OTA0MTk0M3ww&ixlib=rb-4.1.0&q=80&w=1080",
-    "https://images.unsplash.com/photo-1542314831-c6a4d14eff40?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxjaGluZXNlJTIwYXJjaGl0ZWN0dXJlfGVufDF8fHx8MTc3OTA0MTk0M3ww&ixlib=rb-4.1.0&q=80&w=1080",
-    "https://images.unsplash.com/photo-1519999482648-25049ddd37b1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHhhc2lhbiUyMGFyY2hpdGVjdHVyZXxlbnwwfHx8MTc3OTA0MTk0M3ww&ixlib=rb-4.1.0&q=80&w=1080"
-  ];
+  const [banners, setBanners] = useState<string[]>([]);
+  const [hotCitiesData, setHotCitiesData] = useState<{ name: string; num: string; img: string }[]>([]);
+  const [recommendedScenics, setRecommendedScenics] = useState<{ id: number; title: string; cover?: string }[]>([]);
+  const [consultationText, setConsultationText] = useState('在线咨询');
+  const [aboutCompany, setAboutCompany] = useState<Record<string, unknown> | null>(null);
+  const [aboutGuides, setAboutGuides] = useState<Record<string, unknown>[]>([]);
+  const [xhsCases, setXhsCases] = useState<Record<string, unknown>[]>([]);
+  const [wechatCases, setWechatCases] = useState<Record<string, unknown>[]>([]);
+  const [tripReminderPreview, setTripReminderPreview] = useState({ city: '北京', weather: '晴 25°C', hint: '点击查看天气、穿衣建议及行程安排' });
 
-  // TODO: [Backend Interface] Fetch hot cities data from API
-  const hotCitiesData = [
-    { name: '北京', num: '01', img: 'https://images.unsplash.com/photo-1599813876020-0082ea5743fb?q=80&w=600&auto=format&fit=crop' },
-    { name: '西安', num: '02', img: 'https://images.unsplash.com/photo-1584680238861-1250325d7c86?q=80&w=600&auto=format&fit=crop' }
-  ];
+  useEffect(() => {
+    contentApi.banners().then((res) => {
+      const imgs = res.records
+        .map((b) => resolveMediaUrl(String(b.imageUrl || b.coverImage || '')))
+        .filter(Boolean);
+      setBanners(imgs.length ? imgs : [
+        'https://images.unsplash.com/photo-1684871430772-569936b1a0ae?w=1080',
+      ]);
+    }).catch(() => {});
+    contentApi.cities().then((res) => {
+      const cities = res.records.map((c, i) => ({
+        name: String(c.name),
+        num: String(c.displayNo || String(i + 1).padStart(2, '0')),
+        img: resolveMediaUrl(String(c.coverImage || '')),
+      }));
+      if (cities.length) setHotCitiesData(cities);
+    }).catch(() => {});
+    contentApi.scenics({ recommended: true, pageSize: 4 }).then((res) => {
+      const list = res.records.map((s) => ({
+        id: Number(s.id),
+        title: String(s.title || '景点'),
+        cover: resolveMediaUrl(String(s.coverImage || '')),
+      }));
+      if (list.length) setRecommendedScenics(list);
+    }).catch(() => {});
+    contentApi.consultation().then((c) => {
+      if (c.buttonText) setConsultationText(String(c.buttonText));
+    }).catch(() => {});
+    contentApi.aboutCompany().then((c) => { if (c.title || c.longText) setAboutCompany(c); }).catch(() => {});
+    contentApi.guides({ pageSize: 3 }).then((res) => { if (res.records.length) setAboutGuides(res.records); }).catch(() => {});
+    contentApi.cases({ caseType: 'XHS', pageSize: 3 }).then((res) => { if (res.records.length) setXhsCases(res.records); }).catch(() => {});
+    contentApi.cases({ caseType: 'WECHAT', pageSize: 3 }).then((res) => { if (res.records.length) setWechatCases(res.records); }).catch(() => {});
+    contentApi.tripReminders({ pageSize: 1 }).then((res) => {
+      const t = res.records[0];
+      if (t) {
+        setTripReminderPreview({
+          city: String(t.cityName || '北京'),
+          weather: String(t.weatherHint || '晴 25°C'),
+          hint: String(t.content || t.title || '点击查看天气、穿衣建议及行程安排'),
+        });
+      }
+    }).catch(() => {});
+  }, []);
 
   const nextBanner = () => {
     setCurrentBanner((prev) => (prev === banners.length - 1 ? 0 : prev + 1));
@@ -166,7 +208,9 @@ export default function App() {
               公司简介
             </h2>
             <p className="text-sm text-[#1A1A1A]/80 leading-relaxed text-justify relative z-10">
-              我们致力于为您提供最地道的国风文旅体验。深入挖掘华夏大地深厚的历史文化底蕴，将传统之美与现代出行完美结合，为您打造独一无二的游园记忆。无论是千年古刹的静谧，还是市井弄堂的烟火，我们都用心为您呈现。
+              {aboutCompany?.longText
+                ? String(aboutCompany.longText)
+                : '我们致力于为您提供最地道的国风文旅体验。深入挖掘华夏大地深厚的历史文化底蕴，将传统之美与现代出行完美结合，为您打造独一无二的游园记忆。'}
             </p>
           </div>
           
@@ -176,14 +220,16 @@ export default function App() {
               <span className="w-1.5 h-4 bg-gradient-to-b from-[#C8963E] to-[#F5E6C8] rounded-full"></span>
               金牌向导
             </h2>
-            <div className="flex items-center gap-4 bg-[#F5E6C8]/20 p-4 rounded-xl border border-[#C8963E]/10">
-              <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=100" className="w-16 h-16 rounded-full object-cover border-2 border-[#4A8C6F]/30 sepia-[.2]" alt="向导头像" />
+            {(aboutGuides.length ? aboutGuides : [{ name: '苏向导', yearsExperience: 8, intro: '让每一块青砖黛瓦，都为您讲述千年的故事。' }]).slice(0, 1).map((g, idx) => (
+            <div key={idx} className="flex items-center gap-4 bg-[#F5E6C8]/20 p-4 rounded-xl border border-[#C8963E]/10">
+              <img src={resolveMediaUrl(String(g.avatarUrl || '')) || 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=100'} className="w-16 h-16 rounded-full object-cover border-2 border-[#4A8C6F]/30 sepia-[.2]" alt="向导头像" />
               <div>
-                <div className="font-bold text-[#1A1A1A] text-base">苏向导</div>
-                <div className="text-xs text-[#4A8C6F] mt-1 font-medium bg-[#7BBF9E]/10 px-2 py-0.5 rounded-sm inline-block">从业 8 年 | 历史学硕士</div>
-                <p className="text-xs text-[#1A1A1A]/60 mt-2 italic">“让每一块青砖黛瓦，都为您讲述千年的故事。”</p>
+                <div className="font-bold text-[#1A1A1A] text-base">{String(g.name || '金牌向导')}</div>
+                <div className="text-xs text-[#4A8C6F] mt-1 font-medium bg-[#7BBF9E]/10 px-2 py-0.5 rounded-sm inline-block">从业 {String(g.yearsExperience || '8')} 年</div>
+                <p className="text-xs text-[#1A1A1A]/60 mt-2 italic">{String(g.quoteText || g.intro || '')}</p>
               </div>
             </div>
+            ))}
           </div>
 
           {/* Screenshots */}
@@ -199,7 +245,7 @@ export default function App() {
                   <span className="text-xs text-[#4A8C6F]">查看更多 <ChevronRight className="w-3 h-3 inline" /></span>
                 </div>
                 <div className="overflow-hidden rounded-xl border border-[#7BBF9E]/10">
-                  <img src="https://images.unsplash.com/photo-1616469829581-73993eb86b02?w=400" className="w-full h-32 object-cover sepia-[.1] group-hover:scale-105 transition-transform duration-500" alt="小红书截图" />
+                  <img src={resolveMediaUrl(String((xhsCases[0] || {}).coverImage || '')) || 'https://images.unsplash.com/photo-1616469829581-73993eb86b02?w=400'} className="w-full h-32 object-cover sepia-[.1] group-hover:scale-105 transition-transform duration-500" alt="小红书截图" />
                 </div>
               </div>
               <div className="group cursor-pointer pt-2 border-t border-[#7BBF9E]/10">
@@ -208,7 +254,7 @@ export default function App() {
                   <span className="text-xs text-[#4A8C6F]">查看更多 <ChevronRight className="w-3 h-3 inline" /></span>
                 </div>
                 <div className="overflow-hidden rounded-xl border border-[#7BBF9E]/10">
-                  <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=400" className="w-full h-32 object-cover sepia-[.1] group-hover:scale-105 transition-transform duration-500" alt="微信截图" />
+                  <img src={resolveMediaUrl(String((wechatCases[0] || {}).coverImage || '')) || 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=400'} className="w-full h-32 object-cover sepia-[.1] group-hover:scale-105 transition-transform duration-500" alt="微信截图" />
                 </div>
               </div>
             </div>
@@ -289,10 +335,10 @@ export default function App() {
             </div>
             <div className="flex flex-col relative z-10 flex-1">
               <div className="flex items-center gap-3 text-[#1A1A1A] mb-1">
-                <span className="font-extrabold text-base">北京</span>
-                <span className="text-sm font-medium text-[#4A8C6F]">晴 25°C</span>
+                <span className="font-extrabold text-base">{tripReminderPreview.city}</span>
+                <span className="text-sm font-medium text-[#4A8C6F]">{tripReminderPreview.weather}</span>
               </div>
-              <span className="text-[#1A1A1A]/60 text-xs line-clamp-1">点击查看天气、穿衣建议及行程安排</span>
+              <span className="text-[#1A1A1A]/60 text-xs line-clamp-1">{tripReminderPreview.hint}</span>
             </div>
             <ChevronRight className="w-5 h-5 text-[#4A8C6F]/50 relative z-10" />
           </div>
@@ -364,21 +410,21 @@ export default function App() {
             <h2 className="text-xl font-extrabold text-[#1A1A1A] tracking-wide">热门景点</h2>
           </div>
           <div className="grid grid-cols-2 gap-4">
-            {[1, 2].map((item) => (
+            {(recommendedScenics.length ? recommendedScenics : [{ id: 1, title: '景点 1' }, { id: 2, title: '景点 2' }]).map((item, index) => (
               <div
-                key={item}
+                key={item.id}
                 className="relative h-40 rounded-2xl overflow-hidden shadow-[0_8px_20px_rgba(74,140,111,0.12)] group cursor-pointer bg-white border border-white"
               >
-                <div className="absolute inset-0 bg-gradient-to-br from-[#7BBF9E]/20 to-[#F5E6C8]/30"></div>
-                {/* Abstract Mountain SVG */}
-                <svg className="absolute bottom-0 left-0 w-full text-[#4A8C6F] opacity-10 transition-transform duration-500 group-hover:scale-110 group-hover:opacity-20" viewBox="0 0 100 50" preserveAspectRatio="none">
-                  <path fill="currentColor" d="M0,50 L20,20 L40,40 L70,10 L100,50 Z"/>
-                </svg>
+                {item.cover ? (
+                  <img src={item.cover} className="absolute inset-0 w-full h-full object-cover" alt={item.title} />
+                ) : (
+                  <div className="absolute inset-0 bg-gradient-to-br from-[#7BBF9E]/20 to-[#F5E6C8]/30"></div>
+                )}
                 <div className="absolute inset-0 p-4 flex flex-col justify-between">
                   <div className="w-8 h-8 rounded-full bg-white/60 backdrop-blur-sm flex items-center justify-center text-[#4A8C6F] shadow-sm">
-                    <span className="font-bold text-sm">0{item}</span>
+                    <span className="font-bold text-sm">0{index + 1}</span>
                   </div>
-                  <span className="text-[#1A1A1A] font-extrabold text-lg group-hover:text-[#4A8C6F] transition-colors">景点 {item}</span>
+                  <span className="text-[#1A1A1A] font-extrabold text-lg group-hover:text-[#4A8C6F] transition-colors">{item.title}</span>
                 </div>
               </div>
             ))}
@@ -395,7 +441,7 @@ export default function App() {
           <div className="w-5 h-5 rounded-full border border-white flex items-center justify-center">
             <span className="text-xs leading-none">?</span>
           </div>
-          <span>在线咨询</span>
+          <span>{consultationText}</span>
         </button>
       )}
 

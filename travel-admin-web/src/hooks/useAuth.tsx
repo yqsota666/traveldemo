@@ -16,7 +16,9 @@ const AuthContext = createContext<AuthContextValue | null>(null);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<MeUser | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(
+    () => !window.location.pathname.includes('/login')
+  );
 
   const refreshMe = useCallback(async () => {
     if (!getToken()) {
@@ -30,6 +32,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   useEffect(() => {
+    // 登录页不拉取 /me，并清掉过期 token，避免打开登录页就弹出无关报错
+    if (window.location.pathname.includes('/login')) {
+      clearToken();
+      setUser(null);
+      setLoading(false);
+      return;
+    }
     refreshMe().catch(() => {
       clearToken();
       setUser(null);
@@ -38,9 +47,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, [refreshMe]);
 
   const login = useCallback(async (username: string, password: string) => {
-    const { data } = await api.login(username, password);
+    const { data } = await api.login(username.trim(), password.trim());
     setToken(data.result.accessToken);
     setUser(data.result.user);
+    setLoading(false);
   }, []);
 
   const logout = useCallback(() => {
