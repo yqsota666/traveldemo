@@ -72,12 +72,12 @@ export default function ConsultationConfigPage() {
             </Button>
           )}
           {hasPermission('cms:submit') && ['DRAFT', 'OFFLINE'].includes(status) && (
-            <Button onClick={() => api.cmsSubmitConsultation().then(() => { Message.success('已提交'); load(); })}>
+            <Button onClick={() => api.cmsSubmitConsultation().then(() => { Message.success('已提交'); load(); }).catch(() => undefined)}>
               提交审核
             </Button>
           )}
           {canApprove && status === 'PENDING' && (
-            <Button status="success" onClick={() => api.cmsApproveConsultation().then(() => { Message.success('已通过'); load(); })}>
+            <Button status="success" onClick={() => api.cmsApproveConsultation().then(() => { Message.success('已通过'); load(); }).catch(() => undefined)}>
               审核通过
             </Button>
           )}

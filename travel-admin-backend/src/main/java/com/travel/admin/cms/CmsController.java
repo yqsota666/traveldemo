@@ -186,6 +186,7 @@ public class CmsController {
 
     private CmsTable resolveTable(String resource) {
         switch (resource) {
+            case "cities": return CmsTable.CITY;
             case "banners": return CmsTable.BANNER;
             case "scenics": return CmsTable.SCENIC;
             case "hotels": return CmsTable.HOTEL;

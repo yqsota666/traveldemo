@@ -94,6 +94,17 @@ export default function CmsResourcePage({ config }: Props) {
     setVisible(true);
   };
 
+  const parseGalleryImages = (gallery: unknown) => {
+    if (Array.isArray(gallery)) return gallery;
+    if (typeof gallery !== 'string' || !gallery.trim()) return [];
+    try {
+      const parsed = JSON.parse(gallery);
+      return Array.isArray(parsed) ? parsed : [];
+    } catch {
+      return [];
+    }
+  };
+
   const openEdit = (row: Record<string, unknown>) => {
     setEditingId(row.id as number);
     const gallery = row.gallery_images ?? row.galleryImages;
@@ -108,6 +119,12 @@ export default function CmsResourcePage({ config }: Props) {
       tags: row.tags,
       address: row.address,
       priceLabel: row.price_label,
+      bookingChannel: row.booking_channel,
+      openingHours: row.opening_hours,
+      checkinPoints: row.checkin_points,
+      scenicDriveTime: row.scenic_drive_time,
+      roomTypes: row.room_types,
+      facilities: row.facilities,
       price: row.price,
       externalLink: row.external_link,
       notice: row.notice,
@@ -205,17 +222,17 @@ export default function CmsResourcePage({ config }: Props) {
             编辑
           </Button>
           {hasPermission('cms:submit') && ['DRAFT', 'OFFLINE'].includes(String(row.publish_status)) && (
-            <Button type="text" size="small" onClick={() => api.cmsSubmit(config.resource, row.id as number).then(() => { Message.success('已提交审核'); load(page); })}>
+            <Button type="text" size="small" onClick={() => api.cmsSubmit(config.resource, row.id as number).then(() => { Message.success('已提交审核'); load(page); }).catch(() => undefined)}>
               提交审核
             </Button>
           )}
           {canApprove && row.publish_status === 'PENDING' && (
-            <Button type="text" size="small" status="success" onClick={() => api.cmsApprove(config.resource, row.id as number).then(() => { Message.success('已通过'); load(page); })}>
+            <Button type="text" size="small" status="success" onClick={() => api.cmsApprove(config.resource, row.id as number).then(() => { Message.success('已通过'); load(page); }).catch(() => undefined)}>
               通过
             </Button>
           )}
           {canApprove && row.publish_status === 'PUBLISHED' && (
-            <Button type="text" size="small" onClick={() => api.cmsOffline(config.resource, row.id as number).then(() => { Message.success('已下架'); load(page); })}>
+            <Button type="text" size="small" onClick={() => api.cmsOffline(config.resource, row.id as number).then(() => { Message.success('已下架'); load(page); }).catch(() => undefined)}>
               下架
             </Button>
           )}
@@ -288,10 +305,10 @@ export default function CmsResourcePage({ config }: Props) {
           </Button>
           {hasPermission('cms:batch') && selected.length > 0 && (
             <>
-              <Button onClick={() => api.cmsBatchSubmit(config.resource, selected).then(() => { Message.success('已批量提交'); load(page); })}>
+              <Button onClick={() => api.cmsBatchSubmit(config.resource, selected).then(() => { Message.success('已批量提交'); load(page); }).catch(() => undefined)}>
                 批量提交
               </Button>
-              <Button status="danger" onClick={() => api.cmsBatchDelete(config.resource, selected).then(() => { Message.success('已删除'); load(page); })}>
+              <Button status="danger" onClick={() => api.cmsBatchDelete(config.resource, selected).then(() => { Message.success('已删除'); load(page); }).catch(() => undefined)}>
                 批量删除
               </Button>
             </>
@@ -361,6 +378,36 @@ export default function CmsResourcePage({ config }: Props) {
           {config.fields.includes('priceLabel') && (
             <Form.Item label="价格说明" field="priceLabel">
               <Input />
+            </Form.Item>
+          )}
+          {config.fields.includes('bookingChannel') && (
+            <Form.Item label="预约/购票渠道" field="bookingChannel">
+              <Input.TextArea rows={3} />
+            </Form.Item>
+          )}
+          {config.fields.includes('openingHours') && (
+            <Form.Item label="开放时间" field="openingHours">
+              <Input />
+            </Form.Item>
+          )}
+          {config.fields.includes('checkinPoints') && (
+            <Form.Item label="打卡点位" field="checkinPoints">
+              <Input.TextArea rows={3} />
+            </Form.Item>
+          )}
+          {config.fields.includes('scenicDriveTime') && (
+            <Form.Item label="距离景点车程" field="scenicDriveTime">
+              <Input />
+            </Form.Item>
+          )}
+          {config.fields.includes('roomTypes') && (
+            <Form.Item label="房型" field="roomTypes">
+              <Input.TextArea rows={3} />
+            </Form.Item>
+          )}
+          {config.fields.includes('facilities') && (
+            <Form.Item label="设施服务" field="facilities">
+              <Input.TextArea rows={3} />
             </Form.Item>
           )}
           {config.fields.includes('externalLink') && (

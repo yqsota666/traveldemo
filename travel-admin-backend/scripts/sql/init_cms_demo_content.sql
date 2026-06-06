@@ -29,28 +29,28 @@ VALUES
 (2, '西安·古城夜色', '/uploads/cms/banner-xian-1.jpg', 1, 'PUBLISHED', 1, NOW(), 1);
 
 -- 景点（含首页推荐）
-INSERT INTO `cms_scenic` (`city_id`, `title`, `summary`, `cover_image`, `gallery_images`, `tags`, `address`, `price_label`, `notice`, `home_recommended`, `sort_order`, `publish_status`, `created_by_admin_user_id`, `approved_at`, `approved_by_admin_user_id`)
+INSERT INTO `cms_scenic` (`city_id`, `title`, `summary`, `cover_image`, `gallery_images`, `tags`, `address`, `price_label`, `booking_channel`, `opening_hours`, `checkin_points`, `notice`, `home_recommended`, `sort_order`, `publish_status`, `created_by_admin_user_id`, `approved_at`, `approved_by_admin_user_id`)
 VALUES
 (1, '故宫博物院', '世界文化遗产，明清两代皇宫', '/uploads/cms/scenic-forbidden.jpg',
  '["/uploads/cms/scenic-forbidden.jpg","/uploads/cms/banner-beijing-1.jpg"]',
- '5A景区,必打卡', '北京市东城区景山前街4号', '门票约60元起', '请提前预约，携带身份证件', 1, 1, 'PUBLISHED', 1, NOW(), 1),
+ '5A景区,必打卡', '北京市东城区景山前街4号', '门票约60元起', '故宫博物院官方小程序/官网预约购票', '08:30-17:00（周一闭馆，以官方公告为准）', '午门、太和殿、角楼、神武门', '请提前预约，携带身份证件', 1, 1, 'PUBLISHED', 1, NOW(), 1),
 (1, '八达岭长城', '不到长城非好汉', '/uploads/cms/scenic-greatwall.jpg',
  '["/uploads/cms/scenic-greatwall.jpg"]',
- '5A景区,世界遗产', '北京市延庆区', '门票约40元起', '建议穿舒适运动鞋', 1, 2, 'PUBLISHED', 1, NOW(), 1),
+ '5A景区,世界遗产', '北京市延庆区', '门票约40元起', '八达岭长城官方平台/现场窗口', '08:00-17:00（季节调整以官方公告为准）', '北八楼、好汉碑、关城入口', '建议穿舒适运动鞋', 1, 2, 'PUBLISHED', 1, NOW(), 1),
 (2, '秦始皇兵马俑', '世界第八大奇迹', '/uploads/cms/scenic-terracotta.jpg',
  '["/uploads/cms/scenic-terracotta.jpg"]',
- '5A景区,历史', '西安市临潼区', '门票约120元起', '建议请讲解员', 1, 1, 'PUBLISHED', 1, NOW(), 1),
+ '5A景区,历史', '西安市临潼区', '门票约120元起', '秦始皇帝陵博物院官方渠道预约', '08:30-18:00（以景区公告为准）', '一号坑、铜车马展厅、三号坑', '建议请讲解员', 1, 1, 'PUBLISHED', 1, NOW(), 1),
 (2, '大雁塔', '唐代佛教建筑艺术瑰宝', '/uploads/cms/scenic-wildgoose.jpg',
  '["/uploads/cms/scenic-wildgoose.jpg"]',
- '4A景区,夜景', '西安市雁塔区', '免费入园（登塔另收费）', '夜间音乐喷泉值得一看', 0, 2, 'PUBLISHED', 1, NOW(), 1);
+ '4A景区,夜景', '西安市雁塔区', '免费入园（登塔另收费）', '大慈恩寺/大雁塔官方渠道购票', '09:00-17:30（以景区公告为准）', '大雁塔北广场、音乐喷泉、大慈恩寺', '夜间音乐喷泉值得一看', 0, 2, 'PUBLISHED', 1, NOW(), 1);
 
 -- 住宿
-INSERT INTO `cms_hotel` (`city_id`, `title`, `summary`, `cover_image`, `gallery_images`, `tags`, `address`, `price_label`, `notice`, `sort_order`, `publish_status`, `created_by_admin_user_id`, `approved_at`, `approved_by_admin_user_id`)
+INSERT INTO `cms_hotel` (`city_id`, `title`, `summary`, `cover_image`, `gallery_images`, `tags`, `address`, `price_label`, `scenic_drive_time`, `room_types`, `facilities`, `notice`, `sort_order`, `publish_status`, `created_by_admin_user_id`, `approved_at`, `approved_by_admin_user_id`)
 VALUES
 (1, '胡同精品客栈', '步行可达南锣鼓巷，体验老北京生活', '/uploads/cms/hotel-1.jpg',
- '["/uploads/cms/hotel-1.jpg"]', '精品,四合院', '北京市东城区', '约¥580/晚起', '含早餐，可代订门票', 1, 'PUBLISHED', 1, NOW(), 1),
+ '["/uploads/cms/hotel-1.jpg"]', '精品,四合院', '北京市东城区', '约¥580/晚起', '距故宫约15分钟车程', '庭院大床房、亲子套房、精品双床房', '早餐、接送机、洗衣、行李寄存、门票代订', '含早餐，可代订门票', 1, 'PUBLISHED', 1, NOW(), 1),
 (2, '城墙观景酒店', '俯瞰古城墙，交通便捷', '/uploads/cms/hotel-2.jpg',
- '["/uploads/cms/hotel-2.jpg"]', '观景,亲子', '西安市碑林区', '约¥420/晚起', '提供免费接站（需预约）', 2, 'PUBLISHED', 1, NOW(), 1);
+ '["/uploads/cms/hotel-2.jpg"]', '观景,亲子', '西安市碑林区', '约¥420/晚起', '距大雁塔约20分钟车程', '城墙景观房、家庭房、商务双床房', '早餐、免费接站、健身房、儿童用品、行李寄存', '提供免费接站（需预约）', 2, 'PUBLISHED', 1, NOW(), 1);
 
 -- 租车
 INSERT INTO `cms_car_rental` (`city_id`, `title`, `summary`, `cover_image`, `gallery_images`, `tags`, `address`, `price_label`, `notice`, `sort_order`, `publish_status`, `created_by_admin_user_id`, `approved_at`, `approved_by_admin_user_id`)

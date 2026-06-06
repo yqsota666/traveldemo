@@ -23,7 +23,7 @@ export const CMS_CONFIGS: Record<string, CmsResourceConfig> = {
     nameField: 'title',
     showCity: true,
     cityRequired: true,
-    fields: ['summary', 'coverImage', 'galleryImages', 'tags', 'address', 'priceLabel', 'notice', 'homeRecommended'],
+    fields: ['summary', 'coverImage', 'galleryImages', 'tags', 'address', 'priceLabel', 'bookingChannel', 'openingHours', 'checkinPoints', 'notice', 'homeRecommended'],
   },
   hotels: {
     resource: 'hotels',
@@ -31,7 +31,7 @@ export const CMS_CONFIGS: Record<string, CmsResourceConfig> = {
     nameField: 'title',
     showCity: true,
     cityRequired: true,
-    fields: ['summary', 'coverImage', 'galleryImages', 'tags', 'address', 'priceLabel', 'notice'],
+    fields: ['summary', 'coverImage', 'galleryImages', 'tags', 'address', 'priceLabel', 'scenicDriveTime', 'roomTypes', 'facilities', 'notice'],
   },
   'car-rentals': {
     resource: 'car-rentals',

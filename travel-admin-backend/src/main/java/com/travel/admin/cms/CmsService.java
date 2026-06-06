@@ -50,6 +50,7 @@ public class CmsService {
         assertPermission("cms:create");
         AdminPrincipal user = SecurityUtils.currentUser();
         Map<String, Object> data = normalizeBody(table, body);
+        validateForCreate(table, data);
         data.put("publishStatus", CmsConstants.STATUS_DRAFT);
         data.put("createdByAdminUserId", user.getUserId());
         data.put("updatedByAdminUserId", user.getUserId());
@@ -207,6 +208,30 @@ public class CmsService {
         }
         cmsRepository.updatePublishStatus(table, 1L, CmsConstants.STATUS_PUBLISHED, SecurityUtils.currentUser().getUserId());
         logApproval(table, 1L, "APPROVE", status, CmsConstants.STATUS_PUBLISHED, comment);
+    }
+
+    private void validateForCreate(CmsTable table, Map<String, Object> data) {
+        if (table == CmsTable.CITY && empty(data.get("name"))) {
+            throw new BusinessException(400, "请填写城市名称");
+        }
+        if (table == CmsTable.BANNER && empty(data.get("imageUrl"))) {
+            throw new BusinessException(400, "轮播图必须上传图片");
+        }
+        if ((table == CmsTable.SCENIC || table == CmsTable.HOTEL || table == CmsTable.CAR_RENTAL)
+                && data.get("cityId") == null) {
+            throw new BusinessException(400, "请选择所属城市");
+        }
+        if (table == CmsTable.MEDIA_CASE && empty(data.get("caseType"))) {
+            throw new BusinessException(400, "请选择案例类型");
+        }
+        if ((table == CmsTable.SCENIC || table == CmsTable.HOTEL || table == CmsTable.CAR_RENTAL
+                || table == CmsTable.PRODUCT || table == CmsTable.TRIP_REMINDER)
+                && empty(data.get("title"))) {
+            throw new BusinessException(400, "请填写标题");
+        }
+        if (table == CmsTable.GUIDE && empty(data.get("name"))) {
+            throw new BusinessException(400, "请填写名称");
+        }
     }
 
     private void validateForSubmit(CmsTable table, Map<String, Object> row) {

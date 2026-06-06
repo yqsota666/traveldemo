@@ -29,6 +29,12 @@ public final class CmsPublicViewMapper {
         put(out, row, "tags");
         put(out, row, "address");
         put(out, row, "price_label", "priceLabel");
+        put(out, row, "booking_channel", "bookingChannel");
+        put(out, row, "opening_hours", "openingHours");
+        put(out, row, "checkin_points", "checkinPoints");
+        put(out, row, "scenic_drive_time", "scenicDriveTime");
+        put(out, row, "room_types", "roomTypes");
+        put(out, row, "facilities");
         put(out, row, "price");
         put(out, row, "external_link", "externalLink");
         put(out, row, "notice");

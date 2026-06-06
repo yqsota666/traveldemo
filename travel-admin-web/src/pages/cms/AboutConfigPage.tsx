@@ -80,12 +80,12 @@ export default function AboutConfigPage() {
             </Button>
           )}
           {hasPermission('cms:submit') && ['DRAFT', 'OFFLINE'].includes(status) && (
-            <Button onClick={() => api.cmsSubmitAbout().then(() => { Message.success('已提交审核'); load(); })}>
+            <Button onClick={() => api.cmsSubmitAbout().then(() => { Message.success('已提交审核'); load(); }).catch(() => undefined)}>
               提交审核
             </Button>
           )}
           {canApprove && status === 'PENDING' && (
-            <Button status="success" onClick={() => api.cmsApproveAbout().then(() => { Message.success('已通过'); load(); })}>
+            <Button status="success" onClick={() => api.cmsApproveAbout().then(() => { Message.success('已通过'); load(); }).catch(() => undefined)}>
               审核通过
             </Button>
           )}
